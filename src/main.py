@@ -3,18 +3,18 @@ import openai
 import azure.cognitiveservices.speech as speechsdk
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
+activation_keyword_model_file="modesl/5ed6f61d-18b4-4dce-ab5e-b21dfe2f75f8.table"
 keyword = "Hey Plato"
 
 def keyword_from_microphone():
-
     """runs keyword spotting locally, with direct access to the result audio"""
+
     # Creates an instance of a keyword recognition model. Update this to
     # point to the location of your keyword recognition model.
-    model = speechsdk.KeywordRecognitionModel("dd238e75-10d4-4c44-a691-9098aeac7e28.table")
+    model = speechsdk.KeywordRecognitionModel(activation_keyword_model_file)
     # The phrase your keyword recognition model triggers on, matching the keyword used to train the above table.
 
     # Create a local keyword recognizer with the default microphone device for input.
@@ -45,12 +45,13 @@ def keyword_from_microphone():
 
     # Start keyword recognition.
     result_future = keyword_recognizer.recognize_once_async(model)
-    print('Clippy is ready to help...'.format(keyword))
+    logger.info('Waiting for the activation keyword: \"%s\"', keyword)
     result = result_future.get()
 
     # Read result audio (incl. the keyword).
     if result.reason == speechsdk.ResultReason.RecognizedKeyword:
-        logger.debug('recognezed keyword')
+        logger.debug('recognezed an activation keyword')
+        Responding_To_KW()
 
 
 def Responding_To_KW():
@@ -77,6 +78,7 @@ def Responding_To_KW():
 
         if speech_recognition_result.reason == speechsdk.ResultReason.RecognizedSpeech:
             logger.info("Recognized: {}".format(speech_recognition_result.text))
+            logger.debug("Quering OpenAI...")
 
             #Send question as prompt to ChatGPT
             openai.api_key = os.environ.get("OPENAI_KEY")
@@ -88,18 +90,25 @@ def Responding_To_KW():
                 frequency_penalty=0,                        #Adjusts how much the frequency of tokens in the source inmfluences outputs
                 presence_penalty=0.6,                       #Lowers the probability of a word if it already appeared before
             )
-
             #Get response
             response_text = completion_request["choices"][0]["text"]
-            print(response_text)
+            logger.debug("Got the OpenAI response: %s", response_text)
 
+            logger.debug("Synthesis response speech...")
             #Say response
             speech_config.speech_synthesis_voice_name = "en-US-GuyNeural"
             text = response_text
             speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
+            logger.debug("Speking...")
             result = speech_synthesizer.speak_text_async(text).get()
+            logger.debug("Done speeking....")
+
             #Go back
             if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
                 keyword_from_microphone()
 
-keyword_from_microphone()
+def main():
+    keyword_from_microphone()
+
+if __name__ == "__main__":
+    main()
