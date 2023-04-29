@@ -1,4 +1,9 @@
-## Running
+## Installation
+```sh
+curl "https://raw.githubusercontent.com/dzianisv/AssistanPlato/main/install.sh" | bash -x
+```
+
+## Development
 
 1. Copy `env` to `.env`
 2. Retrieve OPENAI_KEY= from https://platform.openai.com/account/api-keys
