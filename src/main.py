@@ -4,6 +4,7 @@ import os
 import openai
 import azure.cognitiveservices.speech as speechsdk
 import logging
+import string
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("plato")
@@ -39,30 +40,69 @@ class AI(object):
     def __init__(self):
         openai.api_key = os.environ.get("OPENAI_KEY")
         self.context = []
-
-    def ask(self, prompt):
-        # ai_response = openai.Completion.create(
-        #     engine="text-davinci-003",                  #Here's where you pick which model to use
-        #     prompt=prompt,    #Here's where you can adjust your prompt
-        #     max_tokens=100,                             #Max number of tokens used
-        #     temperature=0.6,                            #Lower is more specific, higher is more creative responses
-        #     frequency_penalty=0,                        #Adjusts how much the frequency of tokens in the source inmfluences outputs
-        #     presence_penalty=0.6,                       #Lowers the probability of a word if it already appeared before
-        # )
-        # https://platform.openai.com/docs/models/model-endpoint-compatibility
-        self.context.append({"role": "user", "content": prompt})
-
-        messages = [
+        self.system_context = [
             {"role": "system", "content": "Don't say that you are an AI model"},
             {
                 "role": "system",
                 "content": "Act like you are human and philosopher Platon",
             },
         ]
+        self.model = "gpt-3.5-turbo"
+        self.tokens_limit = 4096
+        self.tokens = 0
+        for msg in self.system_context:
+            self.tokens += self.estimate_tokens(msg["content"])
+
+    @staticmethod
+    def estimate_tokens(text):
+        words = 0
+        spaces = 0
+        punctuation_marks = 0
+
+        # Count words and spaces
+        for index, char in enumerate(text):
+            if char == " ":
+                spaces += 1
+                if index > 0 and text[index - 1] != " ":
+                    words += 1
+            elif char in string.punctuation:
+                punctuation_marks += 1
+
+        # Count the last word if the text does not end with a space
+        if len(text) > 0 and text[-1] != " ":
+            words += 1
+
+        # https://gptforwork.com/guides/openai-gpt3-tokens
+        # In English: 1 word ≈ 1.3 tokens
+        # In Spanish: 1 word ≈ 2 tokens
+        # In French: 1 word ≈ 2 tokens
+        # Punctuation marks (,:;?!) = 1 token
+        # Special characters (∝√∅°¬) = 1 to 3 tokens
+        # Emojis (😁🙂🤩) = 2 to 3 tokens
+        return words * 2 + spaces + punctuation_marks
+
+
+    def ask(self, prompt):
+        # remove conetxt when tokens limit is reached
+        estimated_tokens = self.estimate_tokens(prompt)
+        if estimated_tokens > self.tokens_limit:
+            # TODO: truncate question?
+            logger.error("Message is too long")
+            return None
+
+        self.tokens += estimated_tokens
+        while self.tokens_limit < self.tokens:
+            self.tokens -= self.estimate_tokens(self.context.pop(0)["message"])
+
+        self.context.append({"role": "user", "content": prompt})
+
+        messages = []
+        messages.extend(self.system_context)
         messages.extend(self.context)
 
+
         ai_response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=self.model,
             # max_tokens: the maximum number of words or parts of words (tokens) the assistant is allowed to use in its response
             max_tokens=100,
             # temperature: controls how creative or random the digital assistant’s responses will be. A lower number (like 0.05) means the assistant will be more focused and consistent, while a higher number would make the assistant more creative and unpredictable
@@ -121,11 +161,16 @@ def communicate():
         if question:
             logger.info("Recognized %s, quering OpenAI", question)
             text = ai.ask(question)
+            if not text:
+                text = "Sorry, I can't answer your question"
+
             logger.info("AI response: %s", text)
         else:
             break
 
-    speak(f"I am going to sleep. Feel free to wake up saying {activation_keyword}... Have a wonderful day")
+    speak(
+        f"I am going to sleep. Feel free to wake up saying {activation_keyword}... Have a wonderful day"
+    )
     listen_for_activation_keyword()
 
 
