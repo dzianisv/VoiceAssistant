@@ -28,6 +28,8 @@ Cloud Speech Services
 |Whisper                    |
 
 ## AI
+[GPT explanation](https://www.datacamp.com/blog/what-we-know-gpt4)
+
 > One objective benefit is that the GPT-4 API accepts a request with a context length of 8,192 tokens (12.5 pages of text) — this is 2x the context length of GPT-3.5.
 > The GPT-4 API is 14x-29x more expensive than ChatGPT’s default model, gpt-3.5-turbo.
 > The most difficult choice to make when deciding whether to use the GPT-4 API is pricing — as GPT-4 pricing works as follows:
@@ -37,4 +39,5 @@ completions: $0.06 per 750 words (1k tokens)
 
 
 ### GPT system role
+
 [Reference](https://community.openai.com/t/the-system-role-how-it-influences-the-chat-behavior/87353)
