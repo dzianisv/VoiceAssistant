@@ -14,20 +14,23 @@ logger.setLevel(logging.DEBUG)
 
 @dataclass
 class SpeechConfiguration:
+    speech_recognition_language: str
     activation_keyword: str
     activation_keyword_model_file: str
     voice_name: str
     greeting_message: str
     suspend_message: str
+    actor: str
 
+# https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=stt#text-to-speech
 # ru-RU-SvetlanaNeural
 # ru-RU-DariyaNeural
 # ru-RU-DmitryNeural
 # en-US-GuyNeural
-plato_speech_configuration = SpeechConfiguration("Hey Plato", "HeyPlato.table", "en-US-GuyNeural", "How can I help?!", "I am going to sleep, feel free to wake up me when you need my assistance")
-ru_speech_configuration = SpeechConfiguration("Hey Plato", "HeyPlato.table", "ru-RU-SverlanaNueral", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик")
+plato_speech_configuration = SpeechConfiguration("en-US", "Hey Plato", "HeyPlato.table", "en-US-GuyNeural", "How can I help?!", "I am going to sleep, feel free to wake up me when you need my assistance", "Act like you are stoic philosopher and your are Plato philosoper")
+ru_speech_configuration = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-SvetlanaNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you are Sarah Connor")
 
-speech_configuration = plato_speech_configuration
+speech_configuration = ru_speech_configuration
 
 
 speech_key = os.environ.get("AZURE_SPEECH_KEY")
@@ -35,7 +38,11 @@ service_region = os.environ.get("AZURE_REGION")
 
 # Creates an instance of a speech config with specified subscription key and service region.
 # https://learn.microsoft.com/en-us/python/api/azure-cognitiveservices-speech/azure.cognitiveservices.speech.speechconfig?view=azure-python
-speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+speech_config = speechsdk.SpeechConfig(
+    speech_recognition_language=speech_configuration.speech_recognition_language,
+    subscription=speech_key,
+    region=service_region
+)
 # Note: the voice setting will not overwrite the voice element in input SSML.
 # Sets voice, there are many to choose from in Azure Speech Studio
 speech_config.speech_synthesis_voice_name = speech_configuration.voice_name
@@ -68,7 +75,7 @@ class AI(object):
             {"role": "system", "content": "Don't say that you are an AI model"},
             {
                 "role": "system",
-                "content": "Act like you are human and philosopher Platon",
+                "content": speech_configuration.actor,
             },
         ]
         self.model = "gpt-3.5-turbo"
@@ -128,7 +135,7 @@ class AI(object):
         ai_response = openai.ChatCompletion.create(
             model=self.model,
             # max_tokens: the maximum number of words or parts of words (tokens) the assistant is allowed to use in its response
-            max_tokens=100,
+            max_tokens=500,
             # temperature: controls how creative or random the digital assistant’s responses will be. A lower number (like 0.05) means the assistant will be more focused and consistent, while a higher number would make the assistant more creative and unpredictable
             temperature=0.7,
             messages=messages,
