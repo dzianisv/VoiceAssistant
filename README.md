@@ -1,13 +1,11 @@
 ## Installation
 ```sh
-curl "https://raw.githubusercontent.com/dzianisv/AssistanPlato/main/install.sh" | bash -x
+curl "https://raw.githubusercontent.com/dzianisv/AssistantPlato/main/install.sh" | bash -x
 ```
 
 ## Development
 
-1. Copy `env` to `.env`
-2. Retrieve OPENAI_KEY= from https://platform.openai.com/account/api-keys
-3. Retrieve AZURE_SPEECH_KEY= and AZURE_REGION= from https://portal.azure.com/?quickstart=true#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/SpeechServices
+1. Copy `env` to `.env` and set the API keys in `.env`
 4. `pipenv run python src/main.py`
 5. Have fun!
 

@@ -8,20 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-# Update the package list
-echo "Updating package list..."
-apt-get update
-
-# Install Git
-echo "Installing Git..."
-apt-get install -y git
-
-# Install Python3 and Pip
-echo "Installing Python3 and Pip..."
-apt-get install -y python3 python3-pip
-
-# Install Pipenv
-echo "Installing Pipenv..."
+apt-get update -yq && apt-get install -y git python3 python3-pip
 pip3 install pipenv
 
 # Extract the project name from the repository URL
@@ -33,7 +20,7 @@ git clone "$GIT_REPO" "/opt/$PROJECT_NAME"
 # Change to the project directory
 cd "/opt/$PROJECT_NAME" || exit
 
-if [ -f .env ]; then
+if [ ! -f .env ]; then
     cp env .env
 fi
 
