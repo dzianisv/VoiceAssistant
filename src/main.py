@@ -28,7 +28,9 @@ class SpeechConfiguration:
 # ru-RU-DmitryNeural
 # en-US-GuyNeural
 plato_speech_configuration = SpeechConfiguration("en-US", "Hey Plato", "HeyPlato.table", "en-US-GuyNeural", "How can I help?!", "I am going to sleep, feel free to wake up me when you need my assistance", "Act like you are stoic philosopher and your are Plato philosoper")
-ru_speech_configuration = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-SvetlanaNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you are Sarah Connor")
+ru_speech_configuration_2 = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-SvetlanaNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you are Sarah Connor")
+ru_speech_configuration = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-DmitryNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you Сергей Есенин")
+
 
 speech_configuration = ru_speech_configuration
 
