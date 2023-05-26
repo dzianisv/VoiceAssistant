@@ -1,6 +1,6 @@
 ## Installation
 ```sh
-curl "https://raw.githubusercontent.com/dzianisv/AssistantPlato/main/install.sh" | bash -x
+curl "https://raw.githubusercontent.com/dzianisv/AssistantPlato/main/scripts/install.sh" | bash -x
 ```
 
 ## Development
