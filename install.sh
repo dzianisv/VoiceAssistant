@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GIT_REPO=https://github.com/dzianisv/AssistanPlato.git
+GIT_REPO=https://github.com/dzianisv/AssistantPlato.git
 
 # Check if the script is run with root privileges
 if [ "$(id -u)" -ne 0 ]; then
@@ -8,17 +8,21 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-apt-get update -yq && apt-get install -y git python3 python3-pip
-pip3 install pipenv
+if ! command -v python3 || ! command -v pip3 || ! command -v pipenv; then
+  apt-get update -yq && apt-get install -y git python3 python3-pip
+  pip3 install pipenv
+fi
 
-# Extract the project name from the repository URL
-PROJECT_NAME=$(basename -s .git "$GIT_REPO")
+if [[ ! $(git remote get-url origin) =~ ${GIT_REPO%%*/}$ ]]; then
+  # Extract the project name from the repository URL
+  PROJECT_NAME=$(basename -s .git "$GIT_REPO")
 
-# Clone the Git repository into the /opt directory
-git clone "$GIT_REPO" "/opt/$PROJECT_NAME"
+  # Clone the Git repository into the /opt directory
+  git clone "$GIT_REPO" "/opt/$PROJECT_NAME"
 
-# Change to the project directory
-cd "/opt/$PROJECT_NAME" || exit
+  # Change to the project directory
+  cd "/opt/$PROJECT_NAME" || exit
+fi
 
 if [ ! -f .env ]; then
     cp env .env
@@ -39,8 +43,8 @@ After=network.target
 
 [Service]
 Type=simple
-EnvironmentFile=/opt/${PROJECT_NAME}/.env
-WorkingDirectory=/opt/${PROJECT_NAME}
+EnvironmentFile="$(pwd)/.env"
+WorkingDirectory="$(pwd)"
 ExecStart=${PIPENV_PATH} run python3 src/main.py
 Restart=always
 User=root
