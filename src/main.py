@@ -11,7 +11,6 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("plato")
 logger.setLevel(logging.DEBUG)
 
-
 @dataclass
 class SpeechConfiguration:
     speech_recognition_language: str
@@ -23,13 +22,39 @@ class SpeechConfiguration:
     actor: str
 
 # https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=stt#text-to-speech
-# ru-RU-SvetlanaNeural
-# ru-RU-DariyaNeural
-# ru-RU-DmitryNeural
-# en-US-GuyNeural
-plato_speech_configuration = SpeechConfiguration("en-US", "Hey Plato", "HeyPlato.table", "en-US-GuyNeural", "How can I help?!", "I am going to sleep, feel free to wake up me when you need my assistance", "Act like you are stoic philosopher and your are Plato philosoper")
-ru_speech_configuration_2 = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-SvetlanaNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you are Sarah Connor")
-ru_speech_configuration = SpeechConfiguration("ru-RU", "Hey Claudia", "HeyClaudia.table", "ru-RU-DmitryNeural", "Приветик, как я могу помочь?", "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик", "Act like you Сергей Есенин")
+# Voice names:
+#   ru-RU-SvetlanaNeural
+#   ru-RU-DariyaNeural
+#   ru-RU-DmitryNeural
+#   en-US-GuyNeural
+
+plato_speech_configuration = SpeechConfiguration(
+    "en-US",
+    "Hey Plato",
+    "HeyPlato.table",
+    "en-US-GuyNeural",
+    "How can I help?!",
+    "I am going to sleep, feel free to wake up me when you need my assistance",
+    "Act like you are stoic philosopher and your are Plato philosoper",
+)
+ru_speech_configuration_2 = SpeechConfiguration(
+    "ru-RU",
+    "Hey Claudia",
+    "HeyClaudia.table",
+    "ru-RU-SvetlanaNeural",
+    "Приветик, как я могу помочь?",
+    "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик",
+    "Act like you are Sarah Connor",
+)
+ru_speech_configuration = SpeechConfiguration(
+    "ru-RU",
+    "Hey Claudia",
+    "HeyClaudia.table",
+    "ru-RU-SvetlanaNeural",
+    "Приветик, как я могу помочь?",
+    "Я пойду вздремну, разбуди меня когда тебе станет скучно, котик",
+    "Act like you Сергей Есенин",
+)
 
 
 speech_configuration = ru_speech_configuration
@@ -37,26 +62,42 @@ speech_configuration = ru_speech_configuration
 
 speech_key = os.environ.get("AZURE_SPEECH_KEY")
 service_region = os.environ.get("AZURE_REGION")
+openai_key = os.environ.get("OPENAI_KEY")
+
+if len(speech_key) == 0:
+    raise KeyError("AZURE_SPEECH_KEY is not set")
+if len(openai_key) == 0:
+    raise KeyError("OPENAI_KEY is not set")
 
 # Creates an instance of a speech config with specified subscription key and service region.
 # https://learn.microsoft.com/en-us/python/api/azure-cognitiveservices-speech/azure.cognitiveservices.speech.speechconfig?view=azure-python
 speech_config = speechsdk.SpeechConfig(
     speech_recognition_language=speech_configuration.speech_recognition_language,
     subscription=speech_key,
-    region=service_region
+    region=service_region,
 )
 # Note: the voice setting will not overwrite the voice element in input SSML.
 # Sets voice, there are many to choose from in Azure Speech Studio
 speech_config.speech_synthesis_voice_name = speech_configuration.voice_name
-audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
+input_audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
+output_audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+
 speech_recognizer = speechsdk.SpeechRecognizer(
-    speech_config=speech_config, audio_config=audio_config
+    speech_config=speech_config, audio_config=input_audio_config
 )
 
 def speak(text) -> bool:
-    speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
-    future = speech_synthesizer.speak_text_async(text).get()
-    return future.reason == speechsdk.ResultReason.SynthesizingAudioCompleted
+    logger.debug("Speaking %s", text)
+    speech_synthesizer = speechsdk.SpeechSynthesizer(
+        speech_config=speech_config, audio_config=output_audio_config
+    )
+    # Returns: SpeechSynthesisResult
+    synthesis_result = speech_synthesizer.speak_text_async(text).get()
+    if synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+        return True
+    else:
+        logger.error("%s: %s, %s, %s", synthesis_result.reason, synthesis_result.cancellation_details.error_code, synthesis_result.cancellation_details.error_details, synthesis_result.cancellation_details.reason )
+        raise Exception(synthesis_result.cancelation_details.error_details)
 
 
 def listen() -> str:
@@ -71,7 +112,7 @@ def listen() -> str:
 
 class AI(object):
     def __init__(self):
-        openai.api_key = os.environ.get("OPENAI_KEY")
+        openai.api_key = openai_key
         self.context = []
         self.system_context = [
             {"role": "system", "content": "Don't say that you are an AI model"},
@@ -114,7 +155,6 @@ class AI(object):
         # Emojis (😁🙂🤩) = 2 to 3 tokens
         return words * 2 + spaces + punctuation_marks
 
-
     def ask(self, prompt):
         # remove conetxt when tokens limit is reached
         estimated_tokens = self.estimate_tokens(prompt)
@@ -132,7 +172,6 @@ class AI(object):
         messages = []
         messages.extend(self.system_context)
         messages.extend(self.context)
-
 
         ai_response = openai.ChatCompletion.create(
             model=self.model,
@@ -191,9 +230,7 @@ def communicate():
         else:
             break
 
-    speak(
-        speech_configuration.suspend_message
-    )
+    speak(speech_configuration.suspend_message)
     listen_for_activation_keyword()
 
 
@@ -202,7 +239,9 @@ def listen_for_activation_keyword():
 
     # Creates an instance of a keyword recognition model. Update this to
     # point to the location of your keyword recognition model.
-    model = speechsdk.KeywordRecognitionModel(speech_configuration.activation_keyword_model_file)
+    model = speechsdk.KeywordRecognitionModel(
+        speech_configuration.activation_keyword_model_file
+    )
     # The phrase your keyword recognition model triggers on, matching the keyword used to train the above table.
 
     # Create a local keyword recognizer with the default microphone device for input.
@@ -216,7 +255,7 @@ def listen_for_activation_keyword():
         # or due to the end of an input file or stream).
         result = evt.result
         if result.reason == speechsdk.ResultReason.RecognizedKeyword:
-            logger.info("Recognized the activation keyword: %s".format(result.text))
+            logger.info("Recognized the activation keyword: %s", result.text)
         nonlocal done
         done = True
 
@@ -231,7 +270,10 @@ def listen_for_activation_keyword():
     keyword_recognizer.recognized.connect(recognized_cb)
     keyword_recognizer.canceled.connect(canceled_cb)
 
-    logger.info('Waiting for the activation keyword: "%s"', speech_configuration.activation_keyword)
+    logger.info(
+        'Waiting for the activation keyword: "%s"',
+        speech_configuration.activation_keyword,
+    )
     # Start keyword recognition.
     result = keyword_recognizer.recognize_once_async(model).get()
 

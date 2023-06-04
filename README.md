@@ -21,6 +21,9 @@ Cloud Speech Services
 |IBM Cloud               |                  |
 
 
+
+https://pypi.org/project/azure-cognitiveservices-speech/
+https://github.com/Azure/azure-sdk-for-python/issues
 ## Speech-to-Text recognition libraries
 
 | Name                      | Recognition time on RPi3 (speech duration/recogntion duration) |
@@ -29,6 +32,7 @@ Cloud Speech Services
 |[Vosk-Api](https://github.com/alphacep/vosk-api)                  | 60/90s|
 |Tensorflow ASR             |
 |Whisper                    |
+
 
 ## AI
 [GPT explanation](https://www.datacamp.com/blog/what-we-know-gpt4)
@@ -44,3 +48,18 @@ completions: $0.06 per 750 words (1k tokens)
 ### GPT system role
 
 [Reference](https://community.openai.com/t/the-system-role-how-it-influences-the-chat-behavior/87353)
+
+
+### Implementations
+[Microsoft Converstational Speaker](https://github.com/microsoft/conversational-speaker)
+[FrinedBot](https://www.hackster.io/484625/ai-conversation-speaker-aka-friend-bot-part-1-conversation-3adca1)
+[Clippy](https://www.hackster.io/david-packman/clippygpt-6a683a#overview)
+[Davinchi](https://www.hackster.io/devmiser/davinci-the-chatgpt-ai-virtual-assistant-you-can-talk-to-fd00fd)
+[Azure OpenAI + Azure Speech Services](https://levelup.gitconnected.com/integrating-azure-openai-and-azure-speech-services-to-create-a-voice-enabled-chatbot-with-python-60a39f838367)
+[Intune AI Voice Bot](https://jannikreinhard.com/2023/04/23/intune-ai-voice-bot/)
+
+
+## Pulseaudio
+pulsemixer
+apt install systemd-container
+machinectl shell user@ /bin/bash

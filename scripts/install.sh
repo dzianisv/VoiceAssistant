@@ -9,7 +9,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 if ! command -v python3 || ! command -v pip3 || ! command -v pipenv; then
-  apt-get update -yq && apt-get install -y git python3 python3-pip
+  apt-get update -yq && apt-get install -y git python3 python3-pip pulseaudio libasound2 libssl-dev
   pip3 install pipenv
 fi
 
