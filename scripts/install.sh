@@ -11,6 +11,10 @@ fi
 if ! command -v python3 || ! command -v pip3 || ! command -v pipenv; then
   apt-get update -yq && apt-get install -y git python3 python3-pip pulseaudio libasound2 libssl-dev
   pip3 install pipenv
+
+  # install libssl
+  wget "http://ports.ubuntu.com/ubuntu-ports/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb"
+  dpkg -i ./libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb
 fi
 
 if [[ ! $(git remote get-url origin) =~ ${GIT_REPO%%*/}$ ]]; then

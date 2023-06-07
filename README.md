@@ -63,3 +63,23 @@ completions: $0.06 per 750 words (1k tokens)
 pulsemixer
 apt install systemd-container
 machinectl shell user@ /bin/bash
+
+
+## Troubleshooting
+
+1. You have hit your assigned rate limit.
+> openai.error.RateLimitError: You exceeded your current quota, please check your plan and billing details.
+RateLimitError	Cause: You have hit your assigned rate limit.
+Solution: Pace your requests. Read more in our rate limit guide.
+
+2.  [`synthesizer_create_speech_synthesizer_from_config+0x10c` crash](https://github.com/Azure-Samples/cognitive-services-speech-sdk/issues/1969)
+> cognitiveservices/speech/libMicrosoft.CognitiveServices.Speech.core.so(synthesizer_create_speech_synthesizer_from_config+0x10c) [0xffff7df6f9f8]
+/lib/aarch64-linux-gnu/libffi.so.8(+0x6e10) [0xffff7e3d6e10]
+/lib/aarch64-linux-gnu/libffi.so.8(+0x3a94) [0xffff7e3d3a94]
+/usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-aarch64-linux-gnu.so(+0x12b10) [0xffff7e402b10]
+[CALL STACK END]
+
+```bash
+wget "http://ports.ubuntu.com/ubuntu-ports/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb"
+dpkg -i ./libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb
+```
