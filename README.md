@@ -9,30 +9,6 @@ curl "https://raw.githubusercontent.com/dzianisv/AssistantPlato/main/scripts/ins
 4. `pipenv run python src/main.py`
 5. Have fun!
 
-# Research
-## Cloud Speech Recognition
-
-Cloud Speech Services
-
-|Service Name            | Free tier h/month|
-|------------------------|------------------|
-|Azure Speech Services   | 5h               |
-|Google Cloud            | 1h               |
-|IBM Cloud               |                  |
-
-
-
-https://pypi.org/project/azure-cognitiveservices-speech/
-https://github.com/Azure/azure-sdk-for-python/issues
-## Speech-to-Text recognition libraries
-
-| Name                      | Recognition time on RPi3 (speech duration/recogntion duration) |
-|-----------                |--------------------------                                      |
-|Mozilla Deep Speech Tflite | 2/10s|
-|[Vosk-Api](https://github.com/alphacep/vosk-api)                  | 60/90s|
-|Tensorflow ASR             |
-|Whisper                    |
-
 
 ## AI
 [GPT explanation](https://www.datacamp.com/blog/what-we-know-gpt4)
@@ -93,8 +69,8 @@ pactl list sources | grep "Name:"
 # Name: alsa_input.platform-es8316c-card.stereo-fallback
 # Name: alsa_output.platform-hdmi-sound.stereo-fallback.monitor
 device=alsa_input.platform-es8316c-card.stereo-fallback
-parec --device ${device} | sox -t raw -r 44100 -e signed -b 16 -c 2 - output.wav
-paply output.wav
+parec --device ${device} --format=s16le --channels=2 --rate=44100 --file-format=wav output.wav
+paplay output.wav
 
 paplay /usr/share/sounds/alsa/Front_Right.wav
 paplay /usr/share/sounds/alsa/Front_Left.wav
