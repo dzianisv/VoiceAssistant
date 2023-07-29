@@ -63,7 +63,7 @@ The best quality, almost realtime on OrangePi4, but doesn't have good Russian mo
 
 ## Conclusion
 
-My choice is `rhvoice`
+I also tried Azure Speech Services, but it took a few weeks to make it work on latest Armbian/aarch64. Also, Microsoft library doesn't support arvm7 for python modules, so this is not an option. Therefore my choice is `rhvoice`.
 
 # Speech Recognition
 
