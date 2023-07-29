@@ -17,6 +17,11 @@ if ! command -v python3 || ! command -v pip3 || ! command -v pipenv; then
   dpkg -i ./libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb
 fi
 
+if [[ $(uname -m) == "aarch64" ]]; then
+  wget "http://ports.ubuntu.com/ubuntu-ports/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb"
+  dpkg -i ./libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb
+fi
+
 if [[ ! $(git remote get-url origin) =~ ${GIT_REPO%%*/}$ ]]; then
   # Extract the project name from the repository URL
   PROJECT_NAME=$(basename -s .git "$GIT_REPO")

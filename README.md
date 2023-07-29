@@ -83,3 +83,19 @@ Solution: Pace your requests. Read more in our rate limit guide.
 wget "http://ports.ubuntu.com/ubuntu-ports/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb"
 dpkg -i ./libssl1.1_1.1.1-1ubuntu2.1~18.04.23_arm64.deb
 ```
+
+
+2. Pulseaudio
+
+```bash
+pactl list sources | grep "Name:"
+# Name: alsa_output.platform-es8316c-card.stereo-fallback.monitor
+# Name: alsa_input.platform-es8316c-card.stereo-fallback
+# Name: alsa_output.platform-hdmi-sound.stereo-fallback.monitor
+device=alsa_input.platform-es8316c-card.stereo-fallback
+parec --device ${device} | sox -t raw -r 44100 -e signed -b 16 -c 2 - output.wav
+paply output.wav
+
+paplay /usr/share/sounds/alsa/Front_Right.wav
+paplay /usr/share/sounds/alsa/Front_Left.wav
+```

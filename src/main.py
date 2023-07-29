@@ -59,7 +59,6 @@ ru_speech_configuration = SpeechConfiguration(
 
 speech_configuration = ru_speech_configuration
 
-
 speech_key = os.environ.get("AZURE_SPEECH_KEY")
 service_region = os.environ.get("AZURE_REGION")
 openai_key = os.environ.get("OPENAI_KEY")
@@ -76,6 +75,10 @@ speech_config = speechsdk.SpeechConfig(
     subscription=speech_key,
     region=service_region,
 )
+
+# enable logging
+speech_config.set_property(speechsdk.PropertyId.Speech_LogFilename, "/tmp/AssistantPlato-SpeechSdk.log")
+
 # Note: the voice setting will not overwrite the voice element in input SSML.
 # Sets voice, there are many to choose from in Azure Speech Studio
 speech_config.speech_synthesis_voice_name = speech_configuration.voice_name
