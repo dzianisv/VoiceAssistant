@@ -26,6 +26,5 @@ def wait_for_wakeup_word():
     mic_stream.stop_stream()
     mic_stream.close()
 
-
 if __name__ == "__main__":
     wait_for_wakeup_word()

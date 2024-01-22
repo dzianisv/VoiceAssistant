@@ -14,25 +14,29 @@ print('model_path', model_path)
 
 # Configuration for PocketSphinx
 config = {
-    'verbose': True,
+    'verbose': False,
     'hmm': os.path.join(model_path, 'en-us', 'en-us'),
     'lm': False,
-    'keyphrase': 'Hello',  # Your activation word here
+    'keyphrase': "hey",  # Your activation word here
     # You need to optimize it on desktop with a prerecorded audio file, see details from the tutorial
     # Threshold must be specified for every keyphrase. For shorter keyphrase you can use smaller thresholds like 1e-1, for longer threshold must be bigger, up to 1e-50. If your keyphrase is very long, larger than 10 syllables, it is recommended to split it and spot for parts separately. For the best accuracy it is better to have keyphrase with 3-4 syllables. Too short phrases are easily confused.
     # https://stackoverflow.com/questions/40138509/how-to-optimize-threshold-in-pocketsphinx-js
+    # 'dict': 'sandbox/dict.txt',
     'kws_threshold': 1e-10
 }
 
 
-# Create a live speech recognition object
-speech = LiveSpeech(**config)
+def wait():
+    # Create a live speech recognition object
+    speech = LiveSpeech(**config)
 
-print("Listening for the activation word...")
+    print("Listening for the activation word...")
 
-# Process audio chunk by chunk
-for phrase in speech:
-    if phrase.segments(detailed=True):
-        # The activation word was detected
-        print("Activation word detected!")
-        break
+    # Process audio chunk by chunk
+    for phrase in speech:
+        print("Activation word", str(phrase))
+        return
+
+if __name__ == "__main__":
+    while True:
+        wait()
