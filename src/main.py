@@ -7,7 +7,7 @@ import string
 from dataclasses import dataclass
 from llm_langchains import LLM
 from stt_whisper_api import STT
-from tts_ttsx3 import TTS
+from tts_rhvoice import TTS
 import wakeword
 
 logging.basicConfig(level=logging.DEBUG)

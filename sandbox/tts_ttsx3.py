@@ -3,7 +3,7 @@ import pyttsx3
 
 class TTS:
     def __init__(self):
-        engine = pyttsx3.init()
+        engine = pyttsx3.init("espeak")
         """ RATE"""
         rate = engine.getProperty("rate")  # getting details of current speaking rate
         print(rate)  # printing current voice rate
@@ -27,3 +27,4 @@ class TTS:
     def speak(self, text: str):
         self.engine.say(text)
         self.engine.runAndWait()
+        return True

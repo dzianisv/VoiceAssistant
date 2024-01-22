@@ -6,11 +6,9 @@ name = "pypi"
 [packages]
 langchain = "*"
 openai = "*"
-pyttsx3 = "*"
 speechrecognition = "*"
 langchain-community = "*"
 pocketsphinx = "*"
 
 [dev-packages]
 pylint = "*"
-objc = "*"
