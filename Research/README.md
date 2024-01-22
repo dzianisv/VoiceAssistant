@@ -92,3 +92,13 @@ https://github.com/Azure/azure-sdk-for-python/issues
 
 Finally, after testing a few different STT options, I settled on Vosk-Api. 🤘This library had a longer recognition time, but was still the best option for me since it had the best accuracy.
 In conclusion, building a voice assistant takes a lot of research and testing, but finding the right TTS and STT libraries is key. Plus, making sure to support multiple languages is extremely important.
+
+
+## Device Test
+
+```bash
+
+arecord -f S16_LE -r 44100 sample.wav
+aplay sample.wav
+
+```

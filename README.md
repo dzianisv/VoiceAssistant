@@ -75,3 +75,11 @@ paplay output.wav
 paplay /usr/share/sounds/alsa/Front_Right.wav
 paplay /usr/share/sounds/alsa/Front_Left.wav
 ```
+
+# Sandbox
+
+## wakeword
+
+```shell
+apt-get install libspeexdsp-dev portaudio
+```
