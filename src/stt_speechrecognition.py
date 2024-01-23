@@ -17,12 +17,9 @@ class STT():
             logger.info("Listening...")
             audio = self.recognizer.listen(source)
         try:
-            text =  self.recognizer.recognize_whisper_api(audio, api_key=self.api_key)
-            # text = self.recognizer.recognize_google(audio)
+            # text =  self.recognizer.recognize_whisper_api(audio, api_key=self.api_key)
+            text = self.recognizer.recognize_google(audio, language='ru-RU')
             logger.debug("recognized %s", text)
             return text
-            
-        except sr.UnknownValueError as e:
-            logger.error(e)
         except sr.RequestError as e:
             logger.error(e)
