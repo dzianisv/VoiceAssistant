@@ -9,6 +9,10 @@ openai = "*"
 speechrecognition = "*"
 langchain-community = "*"
 pocketsphinx = "*"
+langchain-google-genai = "*"
+gtts = "*"
+pygame = "*"
+pyaudio = "*"
 
 [dev-packages]
 pylint = "*"

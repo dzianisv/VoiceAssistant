@@ -11,24 +11,23 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
 
-openai_key = os.environ.get("OPENAI_KEY")
-if len(openai_key) == 0:
-    raise KeyError("OPENAI_KEY is not set")
-
 logger.info("loading llm...")
 from llm_langchains import LLM
 logger.info("loading STT engine...")
 from stt_speechrecognition import STT
 logger.info("loading TTS engine...")
-from tts_rhvoice import TTS
+# from tts_rhvoice import TTS
+from tts_gtts import TTS
 logger.info("loading wake word engine...")
 import wakeword
 
 greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
 
-llm = LLM(openai_key)
+llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
+
 stt = STT(language='ru-RU')
-tts = TTS(profile='tatiana')
+# tts = TTS(profile='tatiana')
+tts = TTS('ru')
 
 def speak(text) -> bool:
     return tts.speak(text)
