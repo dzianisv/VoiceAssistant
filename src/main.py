@@ -23,7 +23,8 @@ import wakeword
 
 greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
 
-llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
+# llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
+llm = LLM(api_key=os.getenv("OPENAI_KEY"))
 
 stt = STT(language='ru-RU')
 # tts = TTS(profile='tatiana')
