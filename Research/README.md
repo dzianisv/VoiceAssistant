@@ -37,12 +37,27 @@ echo "Привет, как дела?" | RHVoice-client -s Elena | aplay
 
 But then I found RHVoice.👌 This TTS library had better quality and sounded almost as good as TTS (my top pick).
 
+Voice profiles could be found there
+```shell
+$ ls /usr/share/RHVoice/voices/
+alan	   aleksandr-hq  arina	  bdl  elena	    evgeniy-rus  lyubov   pavel  tatiana   vitaliy
+aleksandr  anna		 artemiy  clb  evgeniy-eng  irina	 mikhail  slt	 victoria  yuriy
+```
+
+
 ## RHVoice + speech-dispatcher
 
+```shell
+apt install speech-dispatcher speech-dispatcher-rhvoice rhvoice rhvoice-english rhvoice-russian
+```
+
 Edit /etc/speech-dispatcher/speechd.conf
+
 ```conf
 DefaultModule rhvoice
 ```
+
+and you can change a voice settings at `/etc/speech-dispatcher/modules/rhvoice.conf `
 
 ```bash
 spd-say -o rhvoice -y aleksandr-hq "Привет, как дела?!"
