@@ -33,5 +33,9 @@ class STT():
             
             logger.debug("recognized %s", text)
             return text
+        except sr.UnknownValueError as e:
+            logger.error("failed to recognize")
+            return None 
         except sr.RequestError as e:
             logger.error(e)
+            return None # todo raise an exception here and report it to the user

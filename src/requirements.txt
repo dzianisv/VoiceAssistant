@@ -3,7 +3,6 @@ langchain
 openai
 speechrecognition
 langchain-community
-pocketsphinx
 langchain_google_genai
-pygame
+pocketsphinx
 gtts
