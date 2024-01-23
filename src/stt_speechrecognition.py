@@ -8,15 +8,20 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
 class STT():
-    def __init__(self):
+    def __init__(self, api_key: str):
         self.recognizer = sr.Recognizer()
+        self.api_key = api_key
 
     def listen(self):
         with sr.Microphone() as source:
-            print("Listening...")
+            logger.info("Listening...")
             audio = self.recognizer.listen(source)
         try:
-            return recognizer.recognize_whisper_api(audio)
+            text =  self.recognizer.recognize_whisper_api(audio, api_key=self.api_key)
+            # text = self.recognizer.recognize_google(audio)
+            logger.debug("recognized %s", text)
+            return text
+            
         except sr.UnknownValueError as e:
             logger.error(e)
         except sr.RequestError as e:

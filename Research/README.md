@@ -117,3 +117,18 @@ arecord -f S16_LE -r 44100 sample.wav
 aplay sample.wav
 
 ```
+
+## Python's speechrecognition
+
+https://github.com/Uberi/speech_recognition
+
+supported engines:
+- Google offline
+- Google Cloud API
+- Whisper offline
+- Whisper API
+- Wit.ai
+- Microsoft Speech Recognition
+- Vosk API
+
+Examples: https://github.com/Uberi/speech_recognition/blob/master/examples/microphone_recognition.py

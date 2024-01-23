@@ -5,23 +5,29 @@ import os
 import logging
 import string
 from dataclasses import dataclass
-from llm_langchains import LLM
-from stt_whisper_api import STT
-from tts_rhvoice import TTS
-import wakeword
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
 
-greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
-
 openai_key = os.environ.get("OPENAI_KEY")
 if len(openai_key) == 0:
     raise KeyError("OPENAI_KEY is not set")
 
+logger.info("loading llm...")
+from llm_langchains import LLM
+logger.info("loading STT engine...")
+from stt_speechrecognition import STT
+logger.info("loading TTS engine...")
+from tts_rhvoice import TTS
+logger.info("loading wake word engine...")
+import wakeword
+
+greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
+
 llm = LLM(openai_key)
-stt = STT()
+stt = STT(openai_key)
 tts = TTS()
 
 def speak(text) -> bool:

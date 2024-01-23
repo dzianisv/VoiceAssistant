@@ -1,5 +1,5 @@
 import subprocess
-
+import os
 
 class TTS:
     def __init__(self, profile: str = "tatiana"):
@@ -12,7 +12,8 @@ class TTS:
         self.profile = profile
 
     def speak(self, text: str):
-        p = subprocess.Popen(["RHVoice-test", "--profile", self.profile], stdin=subprocess.PIPE)
-        p.communicate(input=text)
+        with open(os.devnull, "wb") as devnull:
+            p = subprocess.Popen(["RHVoice-test", "--profile", self.profile], stdin=subprocess.PIPE, stdout=devnull, stderr=devnull)
+        p.communicate(input=text.encode('utf8'))
         p.wait()
         return p.returncode == 0

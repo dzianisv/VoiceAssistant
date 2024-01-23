@@ -1,0 +1,6 @@
+pyaduio
+langchain
+openai
+speechrecognition
+langchain-community
+pocketsphinx
