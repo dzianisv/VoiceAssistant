@@ -27,8 +27,8 @@ import wakeword
 greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
 
 llm = LLM(openai_key)
-stt = STT(openai_key)
-tts = TTS()
+stt = STT(language='ru-RU')
+tts = TTS(profile='tatiana')
 
 def speak(text) -> bool:
     return tts.speak(text)
