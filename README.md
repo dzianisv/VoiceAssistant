@@ -76,6 +76,13 @@ paplay /usr/share/sounds/alsa/Front_Right.wav
 paplay /usr/share/sounds/alsa/Front_Left.wav
 ```
 
+3. Install rust
+
+To build some dependencies Rust is required
+```shell
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
 # Sandbox
 
 ## wakeword
