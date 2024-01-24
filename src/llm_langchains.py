@@ -10,6 +10,7 @@ from langchain.prompts import (
 )
 
 from langchain_community.utilities.openweathermap import OpenWeatherMapAPIWrapper
+from langchain.agents import initialize_agent, AgentType, load_tools
 
 class LLM(object):
     def __init__(self, api_key: str, memory_window=8):
@@ -26,15 +27,13 @@ class LLM(object):
 
         memory = ConversationBufferWindowMemory(k=memory_window, memory_key="chat_history", return_messages=True)
 
-        # weather_tool = Tool(
-        #     name="weather", 
-        #     func=OpenWeatherMapAPIWrapper(os.getenv("OPENWEATHERMAP_API_KEY")), 
-        #     description="Get weather data"
-        # )
-
         llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
-        # agent = Agent(tools=[weather_tool], llm=llm, prompt=prompt, verbose=True, memory=memory)
-        self.conversation = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
-
+        
+        # https://python.langchain.com/docs/integrations/tools/openweathermap
+        tools = load_tools(["openweathermap-api"], llm)
+        
+        # chain = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
+        self.agent = initialize_agent(tools, llm=llm, memory=memory, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True)
+    
     def ask(self, prompt):
-        return self.conversation({'question': prompt})['text']
+        return self.agent.invoke({'input': prompt})['output']
