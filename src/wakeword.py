@@ -32,10 +32,11 @@ def wait():
     # Create a live speech recognition object
     speech = LiveSpeech(**config)
 
-    print("Listening for the activation word...")
+    logger.info("waiting for activation keyword %s", config['keyphrase'])
 
     # Process audio chunk by chunk
     for phrase in speech:
+        logger.debug("recognized %s", phrase)
         if "hey" in phrase or "hello" in phrase:
             return
 
