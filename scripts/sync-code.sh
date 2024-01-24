@@ -1,5 +1,5 @@
 #!/bin/bash
-HOST=root@orangepi4-lts
 
-rsync -ra --progress --exclude ".*"  --exclude "bin" --include ".env" . "$HOST:/opt/AssistantPlato/"
-# ssh "$HOST" /opt/AssistantPlato/scripts/install.sh
+HOST=root@orangepipc
+rsync -ra --progress  --exclude ".venv" "./src/" "$HOST:/opt/VoiceAssistant/"
+rsync -ra --progress  --exclude ".venv" "./scripts/install-dependencies.sh" "$HOST:/opt/VoiceAssistant/"

@@ -1,0 +1,15 @@
+pyaudio
+langchain
+openai
+speechrecognition
+langchain-community
+langchain_google_genai
+langchain_openai
+pocketsphinx
+gtts
+pyowm
+wikipedia
+youtube-search
+arxiv
+# duckduckgo-search requires curl impersonate that is not available on armv7
+yt-dlp

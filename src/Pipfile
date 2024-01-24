@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+openai = "*"
+speechrecognition = "*"
+langchain-community = "*"
+pocketsphinx = "*"
+langchain-google-genai = "*"
+gtts = "*"
+pygame = "*"
+pyaudio = "*"
+langchain-openai = "*"
+pyowm = "*"
+wikipedia = "*"
+youtube-search = "*"
+arxiv = "*"
+duckduckgo-search = "*"
+yt-dlp = "*"
+
+[dev-packages]
+pylint = "*"

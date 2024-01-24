@@ -6,3 +6,10 @@ name = "pypi"
 [packages]
 openai = "*"
 azure-cognitiveservices-speech = "*"
+pocketsphinx = "*"
+speechrecognition = "*"
+pvporcupine = "*"
+bark = "*"
+
+pyaudio = "*"
+openwakeword = "*"
