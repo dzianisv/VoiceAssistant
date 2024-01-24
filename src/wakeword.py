@@ -36,8 +36,8 @@ def wait():
 
     # Process audio chunk by chunk
     for phrase in speech:
-        print("Activation word", str(phrase))
-        return
+        if "hey" in phrase or "hello" in phrase:
+            return
 
 if __name__ == "__main__":
     while True:
