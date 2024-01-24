@@ -4,5 +4,6 @@ openai
 speechrecognition
 langchain-community
 langchain_google_genai
+langchain_openai
 pocketsphinx
 gtts

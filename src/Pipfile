@@ -13,6 +13,7 @@ langchain-google-genai = "*"
 gtts = "*"
 pygame = "*"
 pyaudio = "*"
+langchain-openai = "*"
 
 [dev-packages]
 pylint = "*"
