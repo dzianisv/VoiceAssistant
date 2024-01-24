@@ -14,7 +14,7 @@ logger.addHandler(logging.StreamHandler(sys.stderr))
 # Set up the paths for the models
 model_path = get_model_path()
 
-def wait(keyword='hey wallee', threshold=1e-15):
+def wait(keyword='ALOHA', threshold=1e-15):
     # Configuration for PocketSphinx
     config = {
         'verbose': False,

@@ -25,13 +25,14 @@ def find_player():
 def play(filename: str):
     external_player = find_player()
     if external_player:
-        subprocess.run(["cvlc", "--play-and-exit", filename])
+        # subprocess.run(["cvlc", "--play-and-exit", filename])
+        subprocess.run(["play", filename])
     else:
         import pygame
         pygame.init()
         pygame.mixer.init()
 
-        sound = pygame.mixer.Sound("speech.mp3")
+        sound = pygame.mixer.Sound(filename)
         channel = sound.play()
         while channel.get_busy():
             pygame.time.wait(1000)
