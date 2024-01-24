@@ -1,7 +1,7 @@
 #!/bin/sh
-apt install -yq python3 python3-pip python3-virtualenv pipenv rhvoice rhvoice-russian rhvoice-english flac
-apt install -yq sox libsox-fmt-all # required to play mp3
-apt install -yq libxslt1-dev libxml2 libcurl4-openssl-dev
+apt install -yq --no-install-recommends python3 python3-pip python3-virtualenv pipenv rhvoice rhvoice-russian rhvoice-english flac
+apt install -yq --no-install-recommends libxslt1-dev libxml2 libcurl4-openssl-dev 
+apt install -yq --no-install-recommends vlc
 
 cd /opt/VoiceAssistant
 virtualenv .venv

@@ -11,5 +11,5 @@ pyowm
 wikipedia
 youtube-search
 arxiv
-duckduckgo-search
+# duckduckgo-search requires curl impersonate that is not available on armv7
 yt-dlp

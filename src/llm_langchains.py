@@ -1,3 +1,7 @@
+import os
+import sys
+import logging
+
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationChain, LLMChain
@@ -13,7 +17,7 @@ from langchain_community.utilities.openweathermap import OpenWeatherMapAPIWrappe
 from langchain.agents import initialize_agent, AgentType, load_tools
 from langchain_community.tools import YouTubeSearchTool
 
-logger = logging.getLogger("assistant")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
@@ -54,7 +58,7 @@ class LLM(object):
             skils.append("openweathermap-api")
         if check_package("arxiv"):
             skils.append("arxhiv")
-        if check_pacakge("duckduckgo-search"):
+        if check_package("duckduckgo-search"): # requires curl-impersonate that is not available for armv7
             skils.append("ddg-search")
         if check_package("wikipedia"):
             skils.append("wikipedia")

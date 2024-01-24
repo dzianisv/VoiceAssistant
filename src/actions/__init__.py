@@ -1,4 +1,4 @@
-from youtube import PlayYoutube
+from .youtube import PlayYoutube
 
 actions = [PlayYoutube]
 
