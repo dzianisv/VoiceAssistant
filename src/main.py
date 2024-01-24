@@ -30,7 +30,7 @@ elif llm_type == "openai":
 from stt_speechrecognition import STT
 stt = STT(language='ru-RU')
 
-tts_type = 'rhvoice'
+tts_type = 'google'
 if tts_type == 'rhvoice':
     from tts_rhvoice import TTS
     tts = TTS(profile='tatiana')
