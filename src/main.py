@@ -6,10 +6,9 @@ import logging
 import string
 from dataclasses import dataclass
 
-
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler(sys.stderr))
 
 logger.info("loading llm...")
 from llm_langchains import LLM
@@ -58,6 +57,9 @@ def communicate():
             speak("Сейчас узнаю...", block=False)
             text = llm.ask(question)
             logger.info("AI response: %s", text)
+
+            if actions.run(text):
+                break
         else:
             break
 

@@ -8,3 +8,8 @@ langchain_openai
 pocketsphinx
 gtts
 pyowm
+wikipedia
+youtube-search
+arxiv
+duckduckgo-search
+yt-dlp

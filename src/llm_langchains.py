@@ -11,6 +11,11 @@ from langchain.prompts import (
 
 from langchain_community.utilities.openweathermap import OpenWeatherMapAPIWrapper
 from langchain.agents import initialize_agent, AgentType, load_tools
+from langchain_community.tools import YouTubeSearchTool
+
+logger = logging.getLogger("assistant")
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler(sys.stderr))
 
 class LLM(object):
     def __init__(self, api_key: str, memory_window=8):
@@ -30,8 +35,9 @@ class LLM(object):
         llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
         
         # https://python.langchain.com/docs/integrations/tools/openweathermap
-        tools = load_tools(["openweathermap-api"], llm)
-        
+        tools = load_tools(["openweathermap-api", "arxiv", "ddg-search"])
+        tools += [YouTubeSearchTool()]
+
         # chain = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
         self.agent = initialize_agent(tools, llm=llm, memory=memory, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True)
     

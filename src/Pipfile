@@ -15,6 +15,11 @@ pygame = "*"
 pyaudio = "*"
 langchain-openai = "*"
 pyowm = "*"
+wikipedia = "*"
+youtube-search = "*"
+arxiv = "*"
+duckduckgo-search = "*"
+yt-dlp = "*"
 
 [dev-packages]
 pylint = "*"
