@@ -33,7 +33,7 @@ class LLM(object):
         # )
 
         llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
-        agent = Agent(tools=[weather_tool], llm=llm, prompt=prompt, verbose=True, memory=memory)
+        # agent = Agent(tools=[weather_tool], llm=llm, prompt=prompt, verbose=True, memory=memory)
         self.conversation = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
 
     def ask(self, prompt):

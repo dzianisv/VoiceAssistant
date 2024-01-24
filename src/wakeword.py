@@ -13,7 +13,6 @@ logger.addHandler(logging.StreamHandler(sys.stderr))
 
 # Set up the paths for the models
 model_path = get_model_path()
-print('model_path', model_path)
 
 # Configuration for PocketSphinx
 config = {
@@ -36,9 +35,9 @@ def wait():
 
     # Process audio chunk by chunk
     for phrase in speech:
-        logger.debug("recognized %s", phrase)
-        if "hey" in phrase or "hello" in phrase:
-            return
+        logger.debug("recognized \"%s\"", phrase)
+        if "hey" == str(phrase) or "hello" == str(phrase):
+            return phrase
 
 if __name__ == "__main__":
     while True:

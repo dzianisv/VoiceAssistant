@@ -16,7 +16,7 @@ from llm_langchains import LLM
 logger.info("loading wake word engine...")
 import wakeword
 
-greeting_message = "Привет, я твой голосовой помощник. Как я могу помочь тебе?"
+greeting_message = "Как я могу помочь тебе?"
 
 llm_type = "openai"
 if llm_type == "google":
@@ -41,6 +41,12 @@ def speak(text, block=True) -> bool:
 def listen() -> str:
     return stt.listen()
 
+def wait_for_activation_keyword():
+    keyword = wakeword.wait()
+    logger.debug("recognezed an activation keyword \"%s\"", keyword)
+    communicate()
+ 
+
 def communicate():
     text = greeting_message
 
@@ -55,14 +61,8 @@ def communicate():
         else:
             break
 
-    listen_for_activation_keyword()
+    wait_for_activation_keyword()
 
-
-def listen_for_activation_keyword():
-    """runs keyword spotting locally, with direct access to the result audio"""
-    wakeword.wait()
-    logger.debug("recognezed an activation keyword")
-    communicate()
 
 
 if __name__ == "__main__":
