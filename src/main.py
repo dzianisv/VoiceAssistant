@@ -69,7 +69,7 @@ def communicate():
             queues = actions.ActionsQueue()
             
             if actions.run(text, queues):
-                wakeword.wait("stop", 1e-1)
+                wakeword.wait()
                 queues.down.put(actions.Commands.STOP.value)
                 break
         else:
