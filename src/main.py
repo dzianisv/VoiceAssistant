@@ -57,7 +57,7 @@ def communicate():
         logger.info("Listening...")
         question = listen()
         
-        if question in set(['отмена', 'stop', 'cancel', 'never mind']):
+        if question in set(['забудь', 'проехали', 'отмена', 'stop', 'cancel', 'never mind']):
             break
         
         if question:
@@ -69,7 +69,7 @@ def communicate():
             queues = actions.ActionsQueue()
             
             if actions.run(text, queues):
-                wakeword.wait("stop")
+                wakeword.wait("stop", 1e-1)
                 queues.down.put(actions.Commands.STOP.value)
                 break
         else:
