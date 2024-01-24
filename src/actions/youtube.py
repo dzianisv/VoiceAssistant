@@ -38,28 +38,24 @@ class PlayYoutube():
     def run(self, message: str):
         url, v_id = extract_youtube_link_and_id(message)
         if url:
-            workdir = tempfile.mkdtemp()
-            try:
-                logger.info("processing \"%s\"", url)
+            logger.info("processing \"%s\"", url)
 
-                output = subprocess.check_output(["yt-dlp", "--list-formats", url], cwd=workdir, encoding='utf8')
-                for line in output.splitlines():
-                    if 'audio only' in line:
-                        y_format = line.split()[0]
-                        logger.debug("Format string \"%s\", format %s", line, y_format)
-                        p = subprocess.run(["yt-dlp", "-f", y_format, url], encoding='utf8', stdout=subprocess.PIPE)
-                        if p.stdout.startswith("http://"):
-                            url = p.stdout
-                            break
-                else:
-                    raise Exception("Audio-only stream is not found")
-        
-                cmd = ["cvlc", url]
-                logger.info("playing \"%s\"", cmd)
-                p = subprocess.Popen(cmd, cwd=workdir)
-                p.wait()
-            finally:
-                os.removedirs(workdir)
+            output = subprocess.check_output(["yt-dlp", "--list-formats", url], encoding='utf8')
+            for line in output.splitlines():
+                if 'audio only' in line:
+                    y_format = line.split()[0]
+                    logger.debug("Format string \"%s\", format %s", line, y_format)
+                    p = subprocess.run(["yt-dlp", "-f", y_format, url], encoding='utf8', stdout=subprocess.PIPE)
+                    if p.stdout.startswith("http://"):
+                        url = p.stdout
+                        break
+            else:
+                raise Exception("Audio-only stream is not found")
+    
+            cmd = ["cvlc", url]
+            logger.info("playing \"%s\"", cmd)
+            p = subprocess.Popen(cmd)
+            p.wait()
             return True
         else:
             return False
