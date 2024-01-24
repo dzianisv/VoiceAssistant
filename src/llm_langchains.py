@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
+from langchain.chains import ConversationChain, LLMChain
 
-from langchain.chains import LLMChain
 from langchain.prompts import (
     ChatPromptTemplate,
     HumanMessagePromptTemplate,
@@ -26,15 +26,15 @@ class LLM(object):
 
         memory = ConversationBufferWindowMemory(k=memory_window, memory_key="chat_history", return_messages=True)
 
-        weather_tool = Tool(
-            name="weather", 
-            func=OpenWeatherMapAPIWrapper(os.getenv("OPENWEATHERMAP_API_KEY")), 
-            description="Get weather data"
-        )
+        # weather_tool = Tool(
+        #     name="weather", 
+        #     func=OpenWeatherMapAPIWrapper(os.getenv("OPENWEATHERMAP_API_KEY")), 
+        #     description="Get weather data"
+        # )
 
         llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
-        agent = Agent(tools=[weather_tool], llm=llm, prompt=prompt, verbose=True, memory=memory)
-        # self.conversation = LLMChain(llm=llm, )
+        # agent = Agent(tools=[weather_tool], llm=llm, prompt=prompt, verbose=True, memory=memory)
+        self.conversation = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
 
     def ask(self, prompt):
-        return self.conversation(prompt)['text']
+        return self.conversation({'question': prompt})['text']
