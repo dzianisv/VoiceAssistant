@@ -1,5 +1,14 @@
 ## Intro
 
+After weeks of tinkering and coding, I'm thrilled to announce that I've successfully created a custom voice assistant using a blend of innovative tools and technologies.
+
+
+Leveraging the power of Langchains, OpenAI's ChatGPT, Langchains agents, and various retrieval tools, I've crafted an assistant that not only understands and responds to natural language but can also search the web via DuckDuckGo, fetch information from Wikipedia, check the weather with OpenWeatherMap, and stream content directly from YouTube!
+
+
+The most exciting part? This entire project is running smoothly on a Quad-core ARMv7 OrangePiPc (a single board computer similar to Raspberry Pi 3). I am sure that on arm64 with GPU cores (like Nvidia Jetson Nano) I can run everything locally (including Mistral-7B or LLamav2), but on this hardware I run everything on the Cloud.
+
+## Reasons 
 This is ChatGPT powered Voice Assistant. You probably found a lot projects like this. What do you think I created one more?
 
 1. I needed an assistant that could work on armv7. A lot of projects was designed for arm64. For instance Microsoft Speech Services python library is not available for armv7. 
