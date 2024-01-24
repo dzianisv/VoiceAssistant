@@ -13,6 +13,7 @@ class TTS:
         self.profile = profile
 
     def speak(self, text: str, block=True):
+        text = f"... {text}"
         with open(os.devnull, "wb") as devnull:
             p = subprocess.Popen(["RHVoice-test", "--profile", self.profile], stdin=subprocess.PIPE, stdout=devnull, stderr=devnull)
         p.communicate(input=text.encode('utf8'))

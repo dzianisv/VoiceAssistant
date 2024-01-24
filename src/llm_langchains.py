@@ -15,7 +15,7 @@ class LLM(object):
     def __init__(self, api_key: str, memory_window=8):
         prompt = ChatPromptTemplate(
             messages=[
-                SystemMessagePromptTemplate.from_template("""You are voice assistant Jarvis. \
+                SystemMessagePromptTemplate.from_template("""You are voice assistant Jarvis created by Dennis Vashchuk \
                     If you don't know the answer, just say that you don't know. \
                     Use three sentences maximum and keep the answer concise"""
                 ),

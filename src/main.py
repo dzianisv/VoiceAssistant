@@ -55,7 +55,7 @@ def communicate():
         question = listen()
         if question:
             logger.info("Recognized %s", question)
-            speak("Я вас услышал! Дайте мне подумать...", block=False)
+            speak("Сейчас узнаю...", block=False)
             text = llm.ask(question)
             logger.info("AI response: %s", text)
         else:
