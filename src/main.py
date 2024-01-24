@@ -7,6 +7,8 @@ import string
 from dataclasses import dataclass
 
 import actions
+import threading
+
 
 logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
@@ -60,8 +62,15 @@ def communicate():
             text = llm.ask(question)
             logger.info("AI response: %s", text)
 
-            if actions.run(text):
-                break
+            queues = actions.ActionsQueue()
+            
+            if actions.run(text, queues):
+                def wait_for_stop():
+                    if wakeword.wait("stop"):
+                        queues.down.put("STOP")
+                        speak("Хорошо, останавливаюсь.")
+                        return True
+                wait_for_stop()
         else:
             break
 

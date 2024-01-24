@@ -34,12 +34,11 @@ def extract_youtube_link_and_id(message):
     else:
         return None, None
 
-
 class PlayYoutube:
     def __init__(self):
         pass
 
-    def run(self, message: str):
+    def run(self, message: str, queue):
         url, v_id = extract_youtube_link_and_id(message)
         if url:
             logger.info('processing "%s"', url)
@@ -52,20 +51,37 @@ class PlayYoutube:
                     y_format = line.split()[0]
                     logger.debug('Format string "%s", format %s', line, y_format)
                     p = subprocess.run(
-                        ["yt-dlp", "-f", y_format, url],
+                        ["yt-dlp", "-f", y_format, "-g", url],
                         encoding="utf8",
                         stdout=subprocess.PIPE,
                     )
-                    if p.stdout.startswith("http://"):
-                        url = p.stdout
+                    if p.stdout.startswith("https://"):
+                        url = p.stdout.strip()
                         break
+                    else:
+                        logger.warning("failed to get the url of the stream: %s", p.stdout)
             else:
                 raise Exception("Audio-only stream is not found")
 
-            cmd = ["cvlc", url]
+            cmd = ["cvlc", "--play-and-exit", url]
             logger.info('playing "%s"', cmd)
-            p = subprocess.Popen(cmd)
-            p.wait()
+            
+            
+            def event_listener():
+                while True:
+                    command = queue.down.get()  # Get a command from the queue
+                    if command == "STOP":
+                        p.terminate()
+                        break
+
+            def play():
+                p = subprocess.Popen(cmd)
+                p.wait()
+                queue.up.put("FINISHED")
+  
+            threading.Thread(play).start()
+            threading.Thread(event_listener).start()
+            
             return True
         else:
             return False
