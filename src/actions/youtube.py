@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 import re
-import tempfile
+import threading
 
 from urllib.parse import urlparse, parse_qs
 
@@ -66,22 +66,24 @@ class PlayYoutube:
             cmd = ["cvlc", "--play-and-exit", url]
             logger.info('playing "%s"', cmd)
             
+            p = subprocess.Popen(cmd)
             
             def event_listener():
                 while True:
                     command = queue.down.get()  # Get a command from the queue
+                    logger.debug("received command: %s", command)
                     if command == "STOP":
                         p.terminate()
-                        break
+                        p.kill()
+                    
+                    break
 
             def play():
-                p = subprocess.Popen(cmd)
                 p.wait()
                 queue.up.put("FINISHED")
   
-            threading.Thread(play).start()
-            threading.Thread(event_listener).start()
-            
+            threading.Thread(target=play).start()
+            threading.Thread(target=event_listener).start()
             return True
         else:
             return False

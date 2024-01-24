@@ -14,7 +14,6 @@ class TTS:
 
     def speak(self, text: str, block=True):
         # for some reason it drops a few first words
-        text = f"Как я могу. {text}"
         with open(os.devnull, "wb") as devnull:
             p = subprocess.Popen(["RHVoice-test", "--profile", self.profile], stdin=subprocess.PIPE, stdout=devnull, stderr=devnull)
         p.communicate(input=text.encode('utf8'))

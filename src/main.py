@@ -56,6 +56,10 @@ def communicate():
     while speak(text):
         logger.info("Listening...")
         question = listen()
+        
+        if question in set(['отмена', 'stop', 'cancel', 'never mind']):
+            break
+        
         if question:
             logger.info("Recognized %s", question)
             speak("Сейчас узнаю...", block=False)
@@ -65,12 +69,9 @@ def communicate():
             queues = actions.ActionsQueue()
             
             if actions.run(text, queues):
-                def wait_for_stop():
-                    if wakeword.wait("stop"):
-                        queues.down.put("STOP")
-                        speak("Хорошо, останавливаюсь.")
-                        return True
-                wait_for_stop()
+                wakeword.wait("stop")
+                queues.down.put(actions.Commands.STOP.value)
+                break
         else:
             break
 
@@ -79,4 +80,5 @@ def communicate():
 
 
 if __name__ == "__main__":
-    communicate()
+    speak("Я включился")
+    wait_for_activation_keyword()

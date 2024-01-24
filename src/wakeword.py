@@ -14,7 +14,7 @@ logger.addHandler(logging.StreamHandler(sys.stderr))
 # Set up the paths for the models
 model_path = get_model_path()
 
-def wait(keyword='hello'):
+def wait(keyword='hey wallee'):
     # Configuration for PocketSphinx
     config = {
         'verbose': False,
@@ -24,8 +24,8 @@ def wait(keyword='hello'):
         # You need to optimize it on desktop with a prerecorded audio file, see details from the tutorial
         # Threshold must be specified for every keyphrase. For shorter keyphrase you can use smaller thresholds like 1e-1, for longer threshold must be bigger, up to 1e-50. If your keyphrase is very long, larger than 10 syllables, it is recommended to split it and spot for parts separately. For the best accuracy it is better to have keyphrase with 3-4 syllables. Too short phrases are easily confused.
         # https://stackoverflow.com/questions/40138509/how-to-optimize-threshold-in-pocketsphinx-js
-        # 'dict': 'sandbox/dict.txt',
-        'kws_threshold': 1e-10
+        'kws_threshold': 1e-20,
+        'dic': os.path.join(os.path.dirname(__file__), "dict.txt")
     }
     # Create a live speech recognition object
     speech = LiveSpeech(**config)

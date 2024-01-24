@@ -1,13 +1,18 @@
 from .youtube import PlayYoutube
-from dataclasses import dataclass
+from enum import Enum
 import queue
+
+class Commands(Enum):
+    STOP = "STOP"
+    FINISHED = "FINISHED"
 
 actions = [PlayYoutube]
 
-@dataclass
+
 class ActionsQueue:
-    up: queue.Queue
-    down: queue.Queue
+    def __init__(self):
+        self.up = queue.Queue()
+        self.down = queue.Queue()
 
 def run(message: str, *args, **kwargs):
     for Action in actions:
