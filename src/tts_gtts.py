@@ -25,7 +25,7 @@ def find_player():
 def play(filename: str):
     external_player = find_player()
     if external_player:
-        subprocess.run([external_player, filename])
+        subprocess.run(["cvlc", "--play-and-exit", filename])
     else:
         import pygame
         pygame.init()
