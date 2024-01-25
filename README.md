@@ -10,7 +10,7 @@ The most exciting part? This entire project is running smoothly on a Quad-core A
 
 ## Demo
 
-![doc/youtube.webp](https://youtu.be/DmsoqtqpCfA)
+[ ![](doc/youtube.webp)](https://youtu.be/DmsoqtqpCfA)
 
 ## Reasons 
 This is ChatGPT powered Voice Assistant. You probably found a lot projects like this. What do you think I created one more?
