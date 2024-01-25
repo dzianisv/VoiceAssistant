@@ -3,7 +3,7 @@ from io import BytesIO
 import os
 import subprocess
 import tempfile
-
+from languages import detect_language
 
 """https://gtts.readthedocs.io/en/latest/"""
 
@@ -52,35 +52,27 @@ def play(filename: str):
         pygame.quit()
 
 class TTS:
-    def __init__(self, lang='en', block=True):
-        self.lang = lang
+    def __init__(self, block=True):
         self.workdir = os.path.join(os.getcwd(), 'gtts')
         
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
 
     def speak(self, text, block):
-        should_be_cached = False
-        
-        if len (text) < 80:
-            should_be_cached = True
-            name = text
-        else:
-            name = text[:61] + "..."
-        
-        name = clean_filename(name)
-            
-        self.workfile = os.path.join(self.workdir, f"{name}.mp3")
-        
-        if os.path.exists(self.workfile):
-            play(self.workfile)
+        should_be_cached = len (text) < 80
+        name = hex(hash(text))
+        workfile = os.path.join(self.workdir, f"{name}.mp3")
+    
+        if os.path.exists(workfile):
+            play(workfile)
             return True
         
-        tts = gTTS(text, lang=self.lang)
-        tts.save(self.workfile)
-        play(self.workfile)
+        lang_code = detect_language(text)
+        tts = gTTS(text, lang=lang_code)
+        tts.save(workfile)
+        play(workfile)
     
         if not should_be_cached:
-            os.unlink(self.workfile)
+            os.unlink(workfile)
     
         return True
