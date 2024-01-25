@@ -37,6 +37,20 @@ def clean_filename(filename):
     cleaned_filename = re.sub(r'\s+', '_', cleaned_filename.strip())
     return cleaned_filename
 
+def play(filename: str):
+    if find_in_path("play"):
+        subprocess.run(["play", filename])
+    else:
+        import pygame
+        pygame.init()
+        pygame.mixer.init()
+
+        sound = pygame.mixer.Sound(filename)
+        channel = sound.play()
+        while channel.get_busy():
+            pygame.time.wait(1000)
+        pygame.quit()
+
 class TTS:
     def __init__(self, lang='en', block=True):
         self.lang = lang
