@@ -52,7 +52,7 @@ class LLM(object):
 
         # set a proxy
         http_proxy, https_proxy = os.environ.get('HTTP_PROXY', ''), os.environ.get('HTTPS_PROXY', '')
-        os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = os.environ.get('OPENAI_HTTP_PROXY'), os.environ.get('OPENAI_HTTP_PROXY')
+        os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = os.environ.get('OPENAI_HTTP_PROXY', ''), os.environ.get('OPENAI_HTTP_PROXY', '')
         
         llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
         # reset a proxy config
@@ -63,7 +63,7 @@ class LLM(object):
         if check_package("pyowm"):
             skils.append("openweathermap-api")
         if check_package("arxiv"):
-            skils.append("arxhiv")
+            skils.append("arxiv")
         if check_package("duckduckgo-search"): # requires curl-impersonate that is not available for armv7
             skils.append("ddg-search")
         if check_package("wikipedia"):

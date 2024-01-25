@@ -23,7 +23,7 @@ lang_pack = languages[os.getenv("LANGUAGE", "ru")]
 logger.info("loading llm...")
 from llm_langchains import LLM
 logger.info("loading wake word engine...")
-import wakeword
+import wakeword_pvporcupine as wakeword
 
 llm_type = "openai"
 if llm_type == "google":

@@ -1,12 +1,14 @@
 pyaudio
 langchain
-openai
-speechrecognition
 langchain-community
 langchain_google_genai
 langchain_openai
+openai
+speechrecognition
 pocketsphinx
 gtts
+langdetect
+
 pyowm
 wikipedia
 youtube-search
@@ -14,4 +16,7 @@ arxiv
 # duckduckgo-search requires curl impersonate that is not available on armv7
 yt-dlp
 OPi.GPIO
-langdetect
+
+# required by pvporcupine
+pvporcupine
+pvrecorder

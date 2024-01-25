@@ -21,6 +21,8 @@ arxiv = "*"
 duckduckgo-search = "*"
 yt-dlp = "*"
 langdetect = "*"
+pvporcupine = "*"
+pvrecorder = "*"
 
 [dev-packages]
 pylint = "*"
