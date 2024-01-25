@@ -46,6 +46,13 @@ As an option, you can stop service `systemctl stop voice-assistant` and run `./s
 `scripts/install-dependencies.sh` installs all the required dependencies on Armbian
 
 
+## Hardware specification
+
+### [OrangePi PC](http://www.orangepi.org/orangepiwiki/index.php/Orange_Pi_PC)
+CPU: Allwinner H3 ARM Cortex-A7 Quad Core
+Memory: 1GB
+
+
 ## Known-issues
 
 - [Skips a few first words. ALSA/DAC issue](https://forum.armbian.com/topic/33427-orangepipc-alsa-playvlc-skips-a-few-seconds-of-the-audio/)
