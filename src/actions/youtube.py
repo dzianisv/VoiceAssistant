@@ -82,7 +82,7 @@ class PlayYoutube:
                     command = queue.down.get()  # Get a command from the queue
                     logger.debug("received command: %s", command)
                     if command == "STOP":
-                        shared_object.cancled = True
+                        shared_object.canceled = True
                         shared_object.player.kill()
                         break
                     if command == "NEXT":
