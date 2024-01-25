@@ -8,6 +8,10 @@ Leveraging the power of Langchains, OpenAI's ChatGPT, Langchains agents, and var
 
 The most exciting part? This entire project is running smoothly on a Quad-core ARMv7 OrangePiPc (a single board computer similar to Raspberry Pi 3). I am sure that on arm64 with GPU cores (like Nvidia Jetson Nano) I can run everything locally (including Mistral-7B or LLamav2), but on this hardware I run everything on the Cloud.
 
+## Demo
+
+![doc/youtube.webp](https://youtu.be/DmsoqtqpCfA)
+
 ## Reasons 
 This is ChatGPT powered Voice Assistant. You probably found a lot projects like this. What do you think I created one more?
 

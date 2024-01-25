@@ -9,23 +9,21 @@ from dataclasses import dataclass
 import actions
 import threading
 
-
 logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
-from hal.orangepipc import OrangePiPcHal
-hal = OrangePiPcHal()
+from hal import detect
+hal = detect()
 hal.start_blink((1,2))
 
-from languages import EnLanguagePack
-lang_pack = EnLanguagePack
+from languages import languages, get_languge_pack
+lang_pack = languages['ru']
 
 logger.info("loading llm...")
 from llm_langchains import LLM
 logger.info("loading wake word engine...")
 import wakeword
-
 
 llm_type = "openai"
 if llm_type == "google":
@@ -39,10 +37,10 @@ stt = STT(language=lang_pack.google_stt_lang)
 tts_type = 'google'
 if tts_type == 'rhvoice':
     from tts_rhvoice import TTS
-    tts = TTS(profile='tatiana')
+    tts = TTS()
 elif tts_type == 'google':
     from tts_gtts import TTS
-    tts = TTS(lang_pack.google_tts_lang)
+    tts = TTS()
 
 def speak(text, block=True) -> bool:
     hal.start_blink((0.5,2))
