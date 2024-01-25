@@ -37,6 +37,9 @@ if tts_type == 'rhvoice':
 elif tts_type == 'google':
     from tts_gtts import TTS
     tts = TTS('ru')
+    
+from hal.orangepipc import OrangePiPcHal
+hal = OrangePiPcHal()
 
 def speak(text, block=True) -> bool:
     return tts.speak(text, block)
@@ -45,22 +48,24 @@ def listen() -> str:
     return stt.listen()
 
 def wait_for_activation_keyword():
+    hal.start_blink(10)
     keyword = wakeword.wait()
     logger.debug("recognezed an activation keyword \"%s\"", keyword)
     communicate()
- 
 
 def communicate():
     text = greeting_message
 
     while speak(text):
         logger.info("Listening...")
+        hal.led_on()
         question = listen()
         
         if question in set(['забудь', 'проехали', 'отмена', 'stop', 'cancel', 'never mind']):
             break
         
         if question:
+            hal.start_blink(1)
             logger.info("Recognized %s", question)
             speak("Сейчас узнаю...", block=False)
             text = llm.ask(question)
@@ -71,7 +76,8 @@ def communicate():
             if actions.run(text, queues):
                 wakeword.wait()
                 queues.down.put(actions.Commands.STOP.value)
-                break
+                text = greeting_message
+                continue
         else:
             break
 

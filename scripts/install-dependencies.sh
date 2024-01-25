@@ -8,7 +8,7 @@ virtualenv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-useradd -r -s /bin/false voice_assistant -G audio,puslse-access
+useradd -r -s /bin/false voice_assistant -m -G audio,puslse-access
 
 cat << EOF > /usr/lib/systemd/system/voice-assistant.service
 [Unit]
