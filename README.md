@@ -41,3 +41,7 @@ As an option, you can stop service `systemctl stop voice-assistant` and run `./s
 ## Installation on Armbian
 `scripts/install-dependencies.sh` installs all the required dependencies on Armbian
 
+
+## Known-issues
+
+- [Skips a few first words. ALSA/DAC issue](https://forum.armbian.com/topic/33427-orangepipc-alsa-playvlc-skips-a-few-seconds-of-the-audio/)

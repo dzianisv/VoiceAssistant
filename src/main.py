@@ -14,6 +14,11 @@ logger = logging.getLogger("assistant")
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
+from hal.orangepipc import OrangePiPcHal
+hal = OrangePiPcHal()
+hal.start_blink((1,2))
+
+
 logger.info("loading llm...")
 from llm_langchains import LLM
 logger.info("loading wake word engine...")
@@ -30,7 +35,7 @@ elif llm_type == "openai":
 from stt_speechrecognition import STT
 stt = STT(language='ru-RU')
 
-tts_type = 'rhvoice'
+tts_type = 'google'
 if tts_type == 'rhvoice':
     from tts_rhvoice import TTS
     tts = TTS(profile='tatiana')
@@ -39,16 +44,24 @@ elif tts_type == 'google':
     tts = TTS('ru')
 
 def speak(text, block=True) -> bool:
-    return tts.speak(text, block)
+    hal.start_blink((0.5,2))
+    try:
+        return tts.speak(text, block)
+    finally:
+        hal.stop_blink()
 
 def listen() -> str:
-    return stt.listen()
+    hal.led_on()
+    try:
+        return stt.listen()
+    finally:
+        hal.led_off()
 
 def wait_for_activation_keyword():
+    hal.start_blink((0.5,10))
     keyword = wakeword.wait()
     logger.debug("recognezed an activation keyword \"%s\"", keyword)
     communicate()
- 
 
 def communicate():
     text = greeting_message
@@ -61,17 +74,18 @@ def communicate():
             break
         
         if question:
-            logger.info("Recognized %s", question)
-            speak("Сейчас узнаю...", block=False)
+            speak("Подождите, сейчас узнаю...", block=False)
+            hal.start_blink((0.5,1))
             text = llm.ask(question)
-            logger.info("AI response: %s", text)
+            logger.info("LLM: %s", text)
 
             queues = actions.ActionsQueue()
             
             if actions.run(text, queues):
                 wakeword.wait()
                 queues.down.put(actions.Commands.STOP.value)
-                break
+                text = greeting_message
+                continue
         else:
             break
 
