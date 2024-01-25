@@ -15,28 +15,27 @@ def find_in_path(name: str):
 
     return None
 
-def find_player():
-    for player in ["play"]:
-        if find_in_path(player):
-            return player
+import re
+import string
 
-    return None
+def clean_filename(filename):
+    """
+    Cleans the filename by removing not-allowed symbols and trimming spaces.
+    
+    :param filename: The original file name
+    :return: A clean, file-system safe file name
+    """
+    # Define the set of not-allowed characters for file names
+    # Windows does not allow <>:"/\|?* and filenames cannot end with a dot or space
+    # Unix/Linux does not allow /
+    not_allowed_chars = set('<>:"/\\|?*') | set(chr(0))
 
-def play(filename: str):
-    external_player = find_player()
-    if external_player:
-        # subprocess.run(["cvlc", "--play-and-exit", filename])
-        subprocess.run(["play", filename])
-    else:
-        import pygame
-        pygame.init()
-        pygame.mixer.init()
+    # Replace not-allowed characters with an underscore
+    cleaned_filename = ''.join('_' if c in not_allowed_chars else c for c in filename)
 
-        sound = pygame.mixer.Sound(filename)
-        channel = sound.play()
-        while channel.get_busy():
-            pygame.time.wait(1000)
-        pygame.quit()
+    # Additionally, remove leading and trailing whitespaces and replace sequences of whitespace with a single underscore
+    cleaned_filename = re.sub(r'\s+', '_', cleaned_filename.strip())
+    return cleaned_filename
 
 class TTS:
     def __init__(self, lang='en', block=True):
@@ -54,6 +53,8 @@ class TTS:
             name = text
         else:
             name = text[:61] + "..."
+        
+        name = clean_filename(name)
             
         self.workfile = os.path.join(self.workdir, f"{name}.mp3")
         
