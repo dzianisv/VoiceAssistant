@@ -67,7 +67,7 @@ class TTS:
             play(workfile)
             return True
         
-        lang_code = detect_language(tetx)
+        lang_code = detect_language(text)
         tts = gTTS(text, lang=lang_code)
         tts.save(workfile)
         play(workfile)

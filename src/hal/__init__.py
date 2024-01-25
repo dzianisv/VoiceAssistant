@@ -1,4 +1,11 @@
 
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler(sys.stderr))
+
 
 class DummyHal:
     def __init__(self):
@@ -19,7 +26,8 @@ class DummyHal:
 
 def detect():
     try:
-        from orangepipc import OrangePiPcHal
+        from .orangepipc import OrangePiPcHal
         return OrangePiPcHal()
-    except ImportError:
+    except ImportError as e:
+        logger.warning("failed to load HAL package: %s", e)
         return DummyHal()

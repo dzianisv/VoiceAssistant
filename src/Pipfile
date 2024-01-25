@@ -20,6 +20,7 @@ youtube-search = "*"
 arxiv = "*"
 duckduckgo-search = "*"
 yt-dlp = "*"
+langdetect = "*"
 
 [dev-packages]
 pylint = "*"
