@@ -19,7 +19,7 @@ class EnLanguagePack:
     google_tts_lang = 'en'
     
 
-languages = {
+lang_packs = {
     'ru': RuLanguagePack,
     'en': EnLanguagePack
 }

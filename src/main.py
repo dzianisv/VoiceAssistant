@@ -18,9 +18,8 @@ from hal import detect
 hal = detect()
 hal.start_blink((1, 2))
 
-from languages import languages
-
-lang_pack = languages[os.getenv("LANGUAGE", "ru")]
+import languages
+lang_pack = languages.lang_packs[os.getenv("LANGUAGE", "ru")]
 
 logger.info("loading llm...")
 from llm_langchains import LLM
