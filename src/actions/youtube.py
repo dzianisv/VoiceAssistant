@@ -103,12 +103,13 @@ class PlayYoutube:
                         )
                         shared_object.player = player_process
                         player_process.wait()
-                        queue.up.put("FINISHED")
                     except NoAudioStream:
                         logger.debug(
                             "No audio stream found for youtube video %s", video_url
                         )
                         continue
+
+                queue.up.put("FINISHED")
 
             threading.Thread(target=play, args=[shared_object]).start()
             threading.Thread(target=event_listener, args=[shared_object]).start()
