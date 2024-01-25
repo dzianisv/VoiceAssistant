@@ -85,6 +85,9 @@ class PlayYoutube:
                         shared_object.player.kill()
                         shared_object.cancled = True
                         break
+                    if command == "NEXT":
+                        shared_object.player.kill()
+                        continue
 
             def play(shared_object: SharedData):                
                 for video_url, video_id in urls:
