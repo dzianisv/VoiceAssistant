@@ -79,7 +79,7 @@ def communicate():
         logger.info("Listening...")
         question = listen()
 
-        if question in languages.stop_words:
+        if question.strip().lower() in languages.stop_words:
             speak(lang_pack.ok)
             break
 
