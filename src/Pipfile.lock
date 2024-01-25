@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7d93ce60d7a46874f2541080e8456021dd8f237dad987e660f34a9338c392096"
+            "sha256": "c32da432c042c895669aef86da51df1ef0e13d7b161cc1c8eff8882bd8c86643"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -1133,6 +1133,24 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==4.25.2"
+        },
+        "pvporcupine": {
+            "hashes": [
+                "sha256:62ff9495a46df8092ba8f0991c863097d782025b4fcbe644a34bc66a70840886",
+                "sha256:deee0f86b35226c3b884c8befd2ef054acbbcfa8203854eb9d3d2bd8667708f4"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.5'",
+            "version": "==3.0.1"
+        },
+        "pvrecorder": {
+            "hashes": [
+                "sha256:2380b93a31013fbc6a598123a96e568d43068b9bcb207f1afb92b10c9f243f44",
+                "sha256:f8b6a2f2b1619787808221d94ec3baf0e609c7caf31c883715d9cd0908242884"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.5'",
+            "version": "==1.2.1"
         },
         "pyasn1": {
             "hashes": [
