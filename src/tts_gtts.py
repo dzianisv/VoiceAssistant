@@ -89,7 +89,8 @@ class TTS:
 
         def _task():
             if os.path.exists(workfile):
-                self.play(workfile)
+                # cached file, play and exit
+                return self.play(workfile)
         
             lang_code = detect_language(text)
             tts = gTTS(text, lang=lang_code)

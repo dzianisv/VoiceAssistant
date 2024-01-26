@@ -5,9 +5,10 @@ import sys
 import logging
 import string
 import time
+import threading
 from dataclasses import dataclass
 
-import actions
+import skills
 from pydispatch import dispatcher
 
 logger = logging.getLogger("assistant")
@@ -20,7 +21,6 @@ from llm_langchains import LLM
 from wakeword_pvporcupine import WakeWord, KeywordSpottingActions
 from stt_speechrecognition import STT
 import tts
-
 
 class VoiceAssistant:
     def __init__(self, llm_type="openai"):
@@ -39,6 +39,10 @@ class VoiceAssistant:
             self.llm = LLM(api_key=os.getenv("OPENAI_KEY"))
         else:
             raise ValueError("invalid llm_type")
+        
+        self.event = threading.Event()
+        self.thinking_thread = threading.Thread(target=self.thinking_process)
+        self.question = None
 
     def speak(self, text, *args, **kwargs) -> bool:
         logger.info("Speaking...: %s", text)
@@ -56,19 +60,23 @@ class VoiceAssistant:
         finally:
             self.hal.led_off()
 
-    def start(self):
-        self.wait_for_activation_keyword()
+    def run(self):
+        self.thinking_thread.start()
+        
+        while True:
+            self.wait_for_activation_keyword()
+            try:
+                self.communicate()
+            except Exception as e:
+                logger.exception(e)
+                self.tts.speak(self.lang_pack.error_message)
 
     def wait_for_activation_keyword(self):
+        self.hal.start_blink((0.3, 10))
         logger.info("Waiting for the wake word...")
         keyword = self.wakeword.wait()
-        dispatcher.send(signal="stop", sender=dispatcher.Any)
         logger.debug('recognezed an activation keyword "%s"', keyword)
-        try:
-            self.communicate()
-        except Exception as e:
-            logger.exception(e)
-            self.tts.speak(self.lang_pack.error_message)
+        dispatcher.send(signal="stop", sender=dispatcher.Any)
 
     def communicate(self):
         self.speak(self.lang_pack.greeting_message, block=True)
@@ -78,18 +86,32 @@ class VoiceAssistant:
             if question.strip().lower() in languages.stop_words:
                 self.speak(self.lang_pack.ok, block=True)
                 return
-
+            
+            self.event.clear()
+            #todo: mutex
+            self.question = question
+            self.event.set()
+            
+    def thinking_process(self):
+        while True:
+            self.event.wait()
+            question = self.question
+            
             self.speak(self.lang_pack.llm_query)
             self.hal.start_blink((0.5, 1))
             text = self.llm.ask(question)
+            
+            if not self.event.is_set(): # event is not set, looks like a new question is there
+                continue
+            
             logger.info("LLM response: %s", text)
 
-            if actions.run(text):
+            if skills.run(text):
                 return
-
-        self.wait_for_activation_keyword()
-
+            
+            self.speak(text)
+            self.event.clear()
 
 if __name__ == "__main__":
     assistant = VoiceAssistant()
-    assistant.start()
+    assistant.run()
