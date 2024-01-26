@@ -77,7 +77,7 @@ class TTS:
         if self.proc is not None:
             self.proc.kill()
 
-    def speak(self, text):
+    def speak(self, text, block=False):
         logger.info("speaking: %s", text)
         should_be_cached = len (text) < 80
         name = hex(hash(text))
@@ -99,5 +99,9 @@ class TTS:
             if not should_be_cached:
                 os.unlink(workfile)
     
-        threading.Thread(target=_task).start()
+        if block:
+            _task()
+        else:
+            threading.Thread(target=_task).start()
+    
         return True
