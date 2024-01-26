@@ -26,5 +26,5 @@ class FaultTollereantTTS():
                     logger.exception(e)
                     self.fault_ts = time.time()
                     
-def createFaultTollerantTTS():
+def createFaultTolerantTTS():
     return FaultTollereantTTS(tts_gtts.TTS(), tts_rhvoice.TTS())

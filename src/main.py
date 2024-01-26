@@ -39,7 +39,7 @@ from stt_speechrecognition import STT
 stt = STT(language=lang_pack.google_stt_lang)
             
 import tts
-tts = tts.createFaultTollerantTTS()
+tts = tts.createFaultTolerantTTS()
 
 def speak(text, block=True) -> bool:
     hal.start_blink((0.5, 2))
