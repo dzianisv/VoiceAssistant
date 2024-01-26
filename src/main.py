@@ -4,6 +4,7 @@ import os
 import sys
 import logging
 import string
+import time
 from dataclasses import dataclass
 
 import actions
@@ -25,7 +26,7 @@ logger.info("loading llm...")
 from llm_langchains import LLM
 
 logger.info("loading wake word engine...")
-from wakeword_pvporcupine import WakeWord
+from wakeword_pvporcupine import WakeWord, KeywordSpottingActions
 wakeword = WakeWord(lang=os.getenv("LANGUAGE", "ru"))
 
 llm_type = "openai"
@@ -36,13 +37,9 @@ elif llm_type == "openai":
 
 from stt_speechrecognition import STT
 stt = STT(language=lang_pack.google_stt_lang)
-
-import tts_rhvoice
-fallback_tts = tts_rhvoice.TTS()
-
-import tts_gtts
-tts = tts_gtts.TTS()
-
+            
+import tts
+tts = tts.createFaultTollerantTTS()
 
 def speak(text, block=True) -> bool:
     hal.start_blink((0.5, 2))
@@ -50,7 +47,6 @@ def speak(text, block=True) -> bool:
         return tts.speak(text, block)
     finally:
         hal.stop_blink()
-
 
 def listen() -> str:
     hal.led_on()
@@ -68,7 +64,7 @@ def wait_for_activation_keyword():
         communicate()
     except Exception as e:
         logger.exception(e)
-        fallback_tts.speak(lang_pack.error_message)
+        tts.speak(lang_pack.error_message)
 
 def communicate():
     text = lang_pack.greeting_message
@@ -94,9 +90,9 @@ def communicate():
                 queues.down.put(actions.Commands.STOP.value)
                 text = lang_pack.greeting_message
 
-                if action == wakeword.KeywordSpottingActions.STOP:
+                if action == KeywordSpottingActions.STOP:
                     break
-                elif action == wakeword.KeywordSpottingActions.HEY:
+                elif action == KeywordSpottingActions.HEY:
                     continue
         else:
             break

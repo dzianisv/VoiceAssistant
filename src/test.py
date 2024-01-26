@@ -17,7 +17,7 @@ class TestLLM(unittest.TestCase):
         answer = llm.ask("What is whether in Venice?")
         print("asnwer", answer)
 
-    def test_weather(self):
+    def test_youtube_search(self):
         llm = LLM(os.getenv("OPENAI_KEY"))
         answer = llm.ask("Find 'Four Seasons' by Antonio Vivaldi on youtube")
         print("asnwer", answer)
