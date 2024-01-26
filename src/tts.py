@@ -3,13 +3,14 @@ import tts_gtts
 import logging
 import sys
 import time
+import queue
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
 
-class FaultTollereantTTS():
+class FaultTolerantTTS():
     def __init__(self, tts, fallback_tts):
         self.tts = tts
         self.fallback_tts = fallback_tts
@@ -27,4 +28,4 @@ class FaultTollereantTTS():
                     self.fault_ts = time.time()
                     
 def createFaultTolerantTTS():
-    return FaultTollereantTTS(tts_gtts.TTS(), tts_rhvoice.TTS())
+    return FaultTolerantTTS(tts_gtts.TTS(), tts_rhvoice.TTS())

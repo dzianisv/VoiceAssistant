@@ -73,11 +73,11 @@ def communicate():
         logger.info("Listening...")
         question = listen()
 
-        if question.strip().lower() in languages.stop_words:
-            speak(lang_pack.ok)
-            break
-
         if question:
+            if question.strip().lower() in languages.stop_words:
+                speak(lang_pack.ok)
+                break
+        
             speak(lang_pack.llm_query, block=False)
             hal.start_blink((0.5, 1))
             text = llm.ask(question)
