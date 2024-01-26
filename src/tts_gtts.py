@@ -6,6 +6,9 @@ import tempfile
 from languages import detect_language
 import logging
 import sys
+import threading
+
+from pydispatch import dispatcher
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -49,19 +52,32 @@ def clean_filename(filename):
     cleaned_filename = re.sub(r'\s+', '_', cleaned_filename.strip())
     return cleaned_filename
 
-def play(filename: str):
-    # todo: AudioPlayer doesn't work
-    # AudioPlayer(filename).play(block=True)
-    return subprocess.run(["play", filename])
+
     
 class TTS:
-    def __init__(self, block=True):
+    def __init__(self):
         self.workdir = os.path.join(os.getcwd(), 'gtts')
+        self.proc = None
         
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
+            
+        dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
+            
+    def play(self, filename: str):
+        if self.proc is not None:
+            self.proc.kill()
+            self.proc.wait()
 
-    def speak(self, text, block):
+        self.proc = subprocess.Popen(["play", filename])
+        self.proc.wait()
+        self.proc = None
+    
+    def stop(self):
+        if self.proc is not None:
+            self.proc.kill()
+
+    def speak(self, text):
         logger.info("speaking: %s", text)
         should_be_cached = len (text) < 80
         name = hex(hash(text))
@@ -71,16 +87,17 @@ class TTS:
         else:
             workfile = os.path.join(tempfile.gettempdir(), f"{name}.mp3")
 
-        if os.path.exists(workfile):
-            play(workfile)
-            return True
+        def _task():
+            if os.path.exists(workfile):
+                self.play(workfile)
         
-        lang_code = detect_language(text)
-        tts = gTTS(text, lang=lang_code)
-        tts.save(workfile)
-        play(workfile)
+            lang_code = detect_language(text)
+            tts = gTTS(text, lang=lang_code)
+            tts.save(workfile)
+            self.play(workfile)
     
-        if not should_be_cached:
-            os.unlink(workfile)
+            if not should_be_cached:
+                os.unlink(workfile)
     
+        threading.Thread(target=_task).start()
         return True

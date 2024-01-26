@@ -8,10 +8,11 @@ import dataclasses
 
 from urllib.parse import urlparse, parse_qs
 
+from pydispatch import dispatcher
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler(sys.stderr))
-
 
 def extract_youtube_link_and_id(message):
     r = []
@@ -64,55 +65,46 @@ def get_audio_stream_url(url: str):
 
 class PlayYoutube:
     def __init__(self):
-        pass
+        dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
+        # TODO: mutex
+        self.proc = None
+        self.stopped = False
+    
+    def stop(self):
+        self.stopped = True
+        self.proc.kill()
 
-    def run(self, message: str, queue):
+    def run(self, message):
         urls = extract_youtube_link_and_id(message)
 
         if len(urls) > 0:
-            @dataclasses.dataclass
-            class SharedData:
-                player: subprocess.Popen
-                canceled: False    
+            self.stopped = False
             
-            shared_object = SharedData(player=None, canceled=False)
-
-            def event_listener(shared_object: SharedData):
-                while True:
-                    command = queue.down.get()  # Get a command from the queue
-                    logger.debug("received command: %s", command)
-                    if command == "STOP":
-                        shared_object.canceled = True
-                        shared_object.player.kill()
-                        break
-                    if command == "NEXT":
-                        shared_object.player.kill()
-                        continue
-
-            def play(shared_object: SharedData):                
+            def play():                
                 for video_url, video_id in urls:
-                    if shared_object.canceled:
+                    if self.stopped:
                         break
 
                     logger.info('loading "%s"', video_url)
                     try:
                         audio_stream_url = get_audio_stream_url(video_url)
                         logger.info('playing "%s"', audio_stream_url)
-                        player_process = subprocess.Popen(
+                        
+                        if self.stopped:
+                            break
+                        
+                        self.proc = subprocess.Popen(
                             ["cvlc", "--play-and-exit", audio_stream_url]
                         )
-                        shared_object.player = player_process
-                        player_process.wait()
+                        self.proc.wait()
+                        self.proc = None
                     except NoAudioStream:
                         logger.debug(
                             "No audio stream found for youtube video %s", video_url
                         )
                         continue
 
-                queue.up.put("FINISHED")
-
-            threading.Thread(target=play, args=[shared_object]).start()
-            threading.Thread(target=event_listener, args=[shared_object]).start()
+            threading.Thread(target=play).start()
             return True
         else:
             return False

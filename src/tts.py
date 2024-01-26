@@ -16,13 +16,13 @@ class FaultTolerantTTS():
         self.fallback_tts = fallback_tts
         self.fault_ts = 0
 
-    def speak(self, text, block=True):
+    def speak(self, text):
         while True:
             if time.time() - self.fault_ts < 3600:
-                self.fallback_tts.speak(text, block)
+                self.fallback_tts.speak(text)
             else:
                 try:
-                    return self.tts.speak(text, block)
+                    return self.tts.speak(text)
                 except Exception as e:
                     logger.exception(e)
                     self.fault_ts = time.time()

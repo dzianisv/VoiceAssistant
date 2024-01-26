@@ -24,6 +24,7 @@ langdetect = "*"
 pvporcupine = "*"
 pvrecorder = "*"
 audioplayer = "*"
+pydispatcher = "*"
 
 [dev-packages]
 pylint = "*"
