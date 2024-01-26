@@ -1,9 +1,21 @@
-from gtts import gTTS
+
 from io import BytesIO
 import os
 import subprocess
 import tempfile
 from languages import detect_language
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler(sys.stderr))
+
+logger.debug("laoding gtts")
+from gtts import gTTS
+logger.debug("loading audioplayer")
+from audioplayer import AudioPlayer
+logger.debug("all modules are loaded")
 
 """https://gtts.readthedocs.io/en/latest/"""
 
@@ -38,19 +50,10 @@ def clean_filename(filename):
     return cleaned_filename
 
 def play(filename: str):
-    if find_in_path("play"):
-        subprocess.run(["play", filename])
-    else:
-        import pygame
-        pygame.init()
-        pygame.mixer.init()
-
-        sound = pygame.mixer.Sound(filename)
-        channel = sound.play()
-        while channel.get_busy():
-            pygame.time.wait(1000)
-        pygame.quit()
-
+    # todo: AudioPlayer doesn't work
+    # AudioPlayer(filename).play(block=True)
+    return subprocess.run(["play", filename])
+    
 class TTS:
     def __init__(self, block=True):
         self.workdir = os.path.join(os.getcwd(), 'gtts')
@@ -59,6 +62,7 @@ class TTS:
             os.makedirs(self.workdir)
 
     def speak(self, text, block):
+        logger.info("speaking: %s", text)
         should_be_cached = len (text) < 80
         name = hex(hash(text))
         workfile = os.path.join(self.workdir, f"{name}.mp3")

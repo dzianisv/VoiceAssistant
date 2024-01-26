@@ -23,6 +23,7 @@ yt-dlp = "*"
 langdetect = "*"
 pvporcupine = "*"
 pvrecorder = "*"
+audioplayer = "*"
 
 [dev-packages]
 pylint = "*"

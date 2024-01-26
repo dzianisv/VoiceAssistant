@@ -25,7 +25,8 @@ logger.info("loading llm...")
 from llm_langchains import LLM
 
 logger.info("loading wake word engine...")
-import wakeword_pvporcupine as wakeword
+from wakeword_pvporcupine import WakeWord
+wakeword = WakeWord(lang=os.getenv("LANGUAGE", "ru"))
 
 llm_type = "openai"
 if llm_type == "google":
@@ -34,18 +35,13 @@ elif llm_type == "openai":
     llm = LLM(api_key=os.getenv("OPENAI_KEY"))
 
 from stt_speechrecognition import STT
-
 stt = STT(language=lang_pack.google_stt_lang)
 
-tts_type = "google"
-if tts_type == "rhvoice":
-    from tts_rhvoice import TTS
+import tts_rhvoice
+fallback_tts = tts_rhvoice.TTS()
 
-    tts = TTS()
-elif tts_type == "google":
-    from tts_gtts import TTS
-
-    tts = TTS()
+import tts_gtts
+tts = tts_gtts.TTS()
 
 
 def speak(text, block=True) -> bool:
@@ -68,8 +64,11 @@ def wait_for_activation_keyword():
     hal.start_blink((0.5, 10))
     keyword = wakeword.wait()
     logger.debug('recognezed an activation keyword "%s"', keyword)
-    communicate()
-
+    try:
+        communicate()
+    except Exception as e:
+        logger.exception(e)
+        fallback_tts.speak(lang_pack.error_message)
 
 def communicate():
     text = lang_pack.greeting_message

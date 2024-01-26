@@ -37,13 +37,12 @@ Disclaimer: This is erly stages sofware and tested only on OrangePiPc
 
 - Install Armbian on the Single Board Computer and ssh to it
 - Copy rsync the installation scripts and `src/` to /opt/VoiceAssistant/ (you can use script scripts/sync-code.sh)
-- Set api keys in .env file /opt/VoiceAssistant/.env
+- Set API keys in .env file /opt/VoiceAssistant/.env
+- Unmute mic in the `alsamixer`: Run `alsamixer`, press F4, navigate to mic and press `Space`. You will see that mic is now enabled. Repeat for all mic devices. ![alsamixer](./doc/alsamixer.webp)
+- Disable ZRAM, prevent zram mount into /tmp. Otherwise `pip install` could fail because `Out of space`. Edit `/etc/default/armbian-zram-config`, set `ENABLED=false`. You can set it back after dependencies installation.
 - `/opt/VoiceAssistant/install-dependencies.sh` - this script will install all the dependencies, create a user and then start a voice-assistent.service
 
 As an option, you can stop service `systemctl stop voice-assistant` and run `./start.sh` by youself.
-
-## Installation on Armbian
-`scripts/install-dependencies.sh` installs all the required dependencies on Armbian
 
 
 ## Hardware specification

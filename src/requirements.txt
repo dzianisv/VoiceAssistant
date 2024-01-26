@@ -7,6 +7,8 @@ openai
 speechrecognition
 pocketsphinx
 gtts
+audioplayer
+PyGObject # required by audioplayer
 langdetect
 
 pyowm
@@ -20,3 +22,4 @@ OPi.GPIO
 # required by pvporcupine
 pvporcupine
 pvrecorder
+

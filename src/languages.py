@@ -5,6 +5,7 @@ class RuLanguagePack:
     greeting_message = "Как я могу помочь тебе?"
     iam_on = "Я включился!"
     ok = "Окей"
+    error_message = "Ой, что-то пошло не так..."
     
     google_stt_lang = 'ru-RU'
     google_tts_lang = 'ru'
@@ -14,6 +15,7 @@ class EnLanguagePack:
     greeting_message = "How I can help you?"
     iam_on = "I am available!"
     ok = "OK!"
+    error_message = "Opps. Something goes wrong..."
     
     google_stt_lang = 'en-US'
     google_tts_lang = 'en'
