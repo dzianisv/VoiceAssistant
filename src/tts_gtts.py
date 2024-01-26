@@ -65,8 +65,12 @@ class TTS:
         logger.info("speaking: %s", text)
         should_be_cached = len (text) < 80
         name = hex(hash(text))
-        workfile = os.path.join(self.workdir, f"{name}.mp3")
-    
+        
+        if should_be_cached:
+            workfile = os.path.join(self.workdir, f"{name}.mp3")
+        else:
+            workfile = os.path.join(tempfile.gettempdir(), f"{name}.mp3")
+
         if os.path.exists(workfile):
             play(workfile)
             return True
