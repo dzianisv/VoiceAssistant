@@ -50,6 +50,10 @@ As an option, you can stop service `systemctl stop voice-assistant` and run `./s
 ### [OrangePi PC](http://www.orangepi.org/orangepiwiki/index.php/Orange_Pi_PC)
 CPU: Allwinner H3 ARM Cortex-A7 Quad Core
 Memory: 1GB
+Qemu hardware emulation: https://www.qemu.org/docs/master/system/arm/orangepi.html
+```shell
+qemu-system-arm -M orangepi-pc -sd mycard.img -global allwinner-rtc.base-year=2000
+```
 
 
 ## Known-issues

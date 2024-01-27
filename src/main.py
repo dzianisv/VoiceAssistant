@@ -72,7 +72,6 @@ class VoiceAssistant:
                 self.tts.speak(self.lang_pack.error_message)
 
     def wait_for_activation_keyword(self):
-        self.hal.start_blink((0.3, 10))
         logger.info("Waiting for the wake word...")
         keyword = self.wakeword.wait()
         logger.debug('recognezed an activation keyword "%s"', keyword)
@@ -83,7 +82,6 @@ class VoiceAssistant:
         self.question = (
             None  # reset question, this var is used in self.thinking_process()
         )
-        self.event.clear()
 
         self.speak(self.lang_pack.greeting_message, block=True)
         question = self.listen()
@@ -115,7 +113,7 @@ class VoiceAssistant:
             logger.info("LLM response: %s", text)
 
             if skills.run(text):
-                return
+                continue
 
             self.speak(text)
 
