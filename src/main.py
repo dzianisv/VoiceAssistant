@@ -75,6 +75,7 @@ class VoiceAssistant:
             self.update_led_state()
 
     def run(self):
+        self.update_led_state()
         self.thinking_thread.start()
 
         while True:
