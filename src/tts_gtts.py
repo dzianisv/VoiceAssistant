@@ -77,7 +77,7 @@ class TTS:
         if self.proc is not None:
             self.proc.kill()
 
-    def speak(self, text, block=False):
+    def speak(self, text, block=True):
         logger.info("speaking: %s", text)
         should_be_cached = len (text) < 80
         name = hex(hash(text))

@@ -20,6 +20,14 @@ from llm_langchains import LLM
 from wakeword_pvporcupine import WakeWord, KeywordSpottingActions
 from stt_speechrecognition import STT
 import tts
+from enum import Enum
+import dataclasses
+
+@dataclasses.dataclass
+class State:
+    listening: bool
+    thinking: bool
+    speaking: bool
 
 
 class VoiceAssistant:
@@ -44,21 +52,27 @@ class VoiceAssistant:
         self.thinking_thread = threading.Thread(target=self.thinking_process)
         self.question = None
 
+        self.state = State(listening=False, thinking=False, speaking=False)
+
     def speak(self, text, *args, **kwargs) -> bool:
         logger.info("Speaking...: %s", text)
-        self.hal.start_blink((0.5, 2))
         try:
+            self.state.speaking = True
+            self.update_led_state()
             return self.tts.speak(text, *args, **kwargs)
         finally:
-            self.hal.stop_blink()
+            self.state.speaking = False
+            self.update_led_state()
 
     def listen(self) -> str:
         logger.info("Listening...")
-        self.hal.led_on()
         try:
+            self.state.listening = True
+            self.update_led_state()
             return self.stt.listen()
         finally:
-            self.hal.led_off()
+            self.state.listening = False
+            self.update_led_state()
 
     def run(self):
         self.thinking_thread.start()
@@ -101,21 +115,35 @@ class VoiceAssistant:
             question = self.question
             self.event.clear()
 
-            self.speak(self.lang_pack.llm_query)
-            self.hal.start_blink((0.5, 1))
-            text = self.llm.ask(question)
+            self.speak(self.lang_pack.llm_query, block=False)
 
-            if (
-                self.question != question
-            ):  # event is not set, looks like a new question is there
+            try:
+                self.state.thinking = True
+                self.update_led_state()
+                text = self.llm.ask(question)
+            finally:
+                self.state.thinking = False
+                self.update_led_state()
+
+            # event is not set, looks like a new question is there
+            if self.question != question:
                 continue
 
             logger.info("LLM response: %s", text)
-
             if skills.run(text):
                 continue
 
-            self.speak(text)
+            self.speak(text, block=True)
+
+    def update_led_state(self):
+        if self.state.listening:
+            self.hal.led_on()
+        elif self.state.thinking:
+            self.hal.start_blink((0.5, 1))
+        elif self.state.speaking:
+            self.hal.start_blink((0.3, 5))
+        else:
+            self.hal.start_blink((0.3, 10))
 
 
 if __name__ == "__main__":
