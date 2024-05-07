@@ -36,13 +36,11 @@ This is ChatGPT powered Voice Assistant. You probably found a lot projects like 
 Disclaimer: This is erly stages sofware and tested only on OrangePiPc
 
 - Install Armbian on the Single Board Computer and ssh to it
-- Copy rsync the installation scripts and `src/` to /opt/VoiceAssistant/ (you can use script scripts/sync-code.sh)
+- Copy (rsync) the installation scripts and `src/` to `/opt/VoiceAssistant/`. You (you can use script scripts/sync-code.sh)
 - Set API keys in .env file /opt/VoiceAssistant/.env
-- Unmute mic in the `alsamixer`: Run `alsamixer`, press F4, navigate to mic and press `Space`. You will see that mic is now enabled. Repeat for all mic devices. ![alsamixer](./doc/alsamixer.webp)
-- Disable ZRAM, prevent zram mount into /tmp. Otherwise `pip install` could fail because `Out of space`. Edit `/etc/default/armbian-zram-config`, set `ENABLED=false`. You can set it back after dependencies installation.
-- `/opt/VoiceAssistant/install-dependencies.sh` - this script will install all the dependencies, create a user and then start a voice-assistent.service
-
-As an option, you can stop service `systemctl stop voice-assistant` and run `./start.sh` by youself.
+- Unmute the mic in the `alsamixer`: 1. Run `alsamixer`. 2. Press F4, navigate to the mic, and press `Space`. You will see that the mic is now enabled. Repeat for all mic devices. ![alsamixer](./doc/alsamixer.webp)
+- [OrangePi Only] Disable ZRAM, prevent Zram mount into /tmp. Otherwise `pip install` could fail because `Out of space`. Edit `/etc/default/armbian-zram-config`, set `ENABLED=false`. You can set it back after the dependencies installation.
+- `/opt/VoiceAssistant/install-dependencies.sh` - this script will install all the dependencies, create a user, and then start a `voice-assistant.service`
 
 
 ## Hardware specification
@@ -50,6 +48,8 @@ As an option, you can stop service `systemctl stop voice-assistant` and run `./s
 ### [OrangePi PC](http://www.orangepi.org/orangepiwiki/index.php/Orange_Pi_PC)
 CPU: Allwinner H3 ARM Cortex-A7 Quad Core
 Memory: 1GB
+
+### Dev emulator
 Qemu hardware emulation: https://www.qemu.org/docs/master/system/arm/orangepi.html
 ```shell
 qemu-system-arm -M orangepi-pc -sd mycard.img -global allwinner-rtc.base-year=2000
