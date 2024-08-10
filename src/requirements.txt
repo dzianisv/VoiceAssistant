@@ -5,7 +5,6 @@ langchain_google_genai
 langchain_openai
 openai
 speechrecognition
-pocketsphinx
 gtts
 audioplayer
 PyGObject # required by audioplayer
@@ -18,9 +17,5 @@ arxiv
 # duckduckgo-search requires curl impersonate that is not available on armv7
 yt-dlp
 OPi.GPIO
-
-# required by pvporcupine
-pvporcupine
-pvrecorder
 
 pydispatcher
