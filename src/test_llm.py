@@ -20,6 +20,9 @@ class TestLLM(unittest.TestCase):
         self.assertIn("composer", response)
 
 
+    def test_youtube(self):
+        response = self.llm.ask("Find Antonio Vivaldo on youtube")
+        print(response)
 
 if __name__ == '__main__':
     unittest.main()
