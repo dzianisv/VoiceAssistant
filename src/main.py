@@ -44,7 +44,7 @@ class VoiceAssistant:
         if llm_type == "google":
             self.llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
         elif llm_type == "openai":
-            self.llm = LLM(api_key=os.getenv("OPENAI_KEY"))
+            self.llm = LLM()
         else:
             raise ValueError("invalid llm_type")
 

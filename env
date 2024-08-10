@@ -1,4 +1,5 @@
-OPENAI_KEY=<get it at https://platform.openai.com/account/api-keys>
+OPENAI_API_KEY=<get it at https://platform.openai.com/account/api-keys>
+OPENAI_API_BASE=
 OPNEAI_HTTP_PROXY=http://user:password@ip:port
 OPENWEATHERMAP_API_KEY=
 LANGUAGE=en

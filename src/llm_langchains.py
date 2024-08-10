@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 
-from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import ConversationChain, LLMChain
 
@@ -33,7 +33,7 @@ def check_package(package_name):
 
 
 class LLM(object):
-    def __init__(self, api_key: str, memory_window=8):
+    def __init__(self, memory_window=8):
         prompt = ChatPromptTemplate(
             messages=[
                 SystemMessagePromptTemplate.from_template(
@@ -50,14 +50,8 @@ class LLM(object):
             k=memory_window, memory_key="chat_history", return_messages=True
         )
 
-        # set a proxy
-        http_proxy, https_proxy = os.environ.get('HTTP_PROXY', ''), os.environ.get('HTTPS_PROXY', '')
-        os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = os.environ.get('OPENAI_HTTP_PROXY', ''), os.environ.get('OPENAI_HTTP_PROXY', '')
-        
-        llm = ChatOpenAI(openai_api_key=api_key, temperature=0.7, model="gpt-3.5-turbo")
-        # reset a proxy config
-        os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = http_proxy, https_proxy
-         
+        llm = OpenAI(openai_api_base=os.environ.get("OPENAI_API_BASE"), openai_api_key=os.environ.get("OPENAI_API_KEY"), temperature=0.7, model="gpt-4o")
+
         # https://python.langchain.com/docs/integrations/tools/openweathermap
         skils = []
         if check_package("pyowm"):
