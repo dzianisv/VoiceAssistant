@@ -1,8 +1,8 @@
 from langdetect import detect
 
 class RuLanguagePack:
-    llm_query = "Подождите, сейчас узнаю..."
-    greeting_message = "Как я могу помочь тебе?"
+    llm_query = "Работаю над этим"
+    greeting_message = "Слушаю"
     iam_on = "Я включился!"
     ok = "Окей"
     error_message = "Ой, что-то пошло не так..."

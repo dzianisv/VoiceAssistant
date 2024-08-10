@@ -34,18 +34,6 @@ def check_package(package_name):
 
 class LLM(object):
     def __init__(self, memory_window=8):
-        prompt = ChatPromptTemplate(
-            messages=[
-                SystemMessagePromptTemplate.from_template(
-                    """You are voice assistant Jarvis created by Dennis Vashchuk \
-                    If you don't know the answer, just say that you don't know. \
-                    Use three sentences maximum and keep the answer concise"""
-                ),
-                MessagesPlaceholder(variable_name="chat_history"),
-                HumanMessagePromptTemplate.from_template("{question}"),
-            ]
-        )
-
         memory = ConversationBufferWindowMemory(
             k=memory_window, memory_key="chat_history", return_messages=True
         )
@@ -64,11 +52,11 @@ class LLM(object):
             skils.append("wikipedia")
 
         tools = load_tools(skils)
-        tools += [YouTubeSearchTool()]
+        tools.append(YouTubeSearchTool())
 
         # chain = LLMChain(llm=llm, prompt=prompt, memory=memory, verbose=True)
         self.agent = initialize_agent(
-            tools,
+            tools=tools,
             llm=llm,
             memory=memory,
             agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
