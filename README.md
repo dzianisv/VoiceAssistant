@@ -57,7 +57,7 @@ qemu-system-arm -M orangepi-pc -sd mycard.img -global allwinner-rtc.base-year=20
 
 ### MacOS develpoment
 ```shell
-brew install -y pkg-config cairo
+brew install -y portaudio
 pip install -r src/requirements.txt
 python3 src/main.py
 ```

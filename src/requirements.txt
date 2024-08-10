@@ -7,6 +7,7 @@ speechrecognition
 gtts
 langdetect
 pygame # to play gtts sounds
+portaudio # required by speech recognition library
 
 pyowm
 wikipedia
