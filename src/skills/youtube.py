@@ -11,8 +11,6 @@ from urllib.parse import urlparse, parse_qs
 from pydispatch import dispatcher
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
 
 def extract_youtube_link_and_id(message):
     r = []

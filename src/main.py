@@ -10,8 +10,6 @@ from dataclasses import dataclass
 from pydispatch import dispatcher
 
 logger = logging.getLogger("assistant")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
 
 import skills
 from hal import detect
@@ -42,9 +40,9 @@ class VoiceAssistant:
         self.wakeword = WakeWord(lang=os.getenv("LANGUAGE", "ru"))
         logger.info("loading llm...")
         if llm_type == "google":
-            self.llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
+            self.llm = LLM()
         elif llm_type == "openai":
-            self.llm = LLM(api_key=os.getenv("OPENAI_KEY"))
+            self.llm = LLM()
         else:
             raise ValueError("invalid llm_type")
 
@@ -148,5 +146,6 @@ class VoiceAssistant:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     assistant = VoiceAssistant()
     assistant.run()

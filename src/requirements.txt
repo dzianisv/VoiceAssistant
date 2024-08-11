@@ -1,15 +1,15 @@
-pyaudio
 langchain
 langchain-community
 langchain_google_genai
 langchain_openai
+langchainhub
 openai
 speechrecognition
-pocketsphinx
 gtts
-audioplayer
-PyGObject # required by audioplayer
 langdetect
+pygame # to play gtts sounds
+portaudio # required by speech recognition library
+git+https://github.com/dzianisv/ReatimeTTS[gtts,openai]
 
 pyowm
 wikipedia
@@ -17,7 +17,6 @@ youtube-search
 arxiv
 # duckduckgo-search requires curl impersonate that is not available on armv7
 yt-dlp
-OPi.GPIO
 
 # required by pvporcupine
 pvporcupine

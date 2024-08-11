@@ -1,0 +1,5 @@
+audioplayer
+PyGObject # required by audioplayer
+langdetect
+OPi.GPIO
+pyaudio

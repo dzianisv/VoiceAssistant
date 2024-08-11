@@ -3,26 +3,17 @@ import logging
 import sys
 import enum
 import dataclasses
-
+import platform
 
 class KeywordSpottingActions(enum.Enum):
     HEY = "hey"
     STOP = "stop"
 
-
-# initialize logger
+# Initialize logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
-
 
 import pvporcupine
 from pvrecorder import PvRecorder
-
-""">>> print(pvporcupine.KEYWORDS)
-{'pico clock', 'hey google', 'grapefruit', 'picovoice', 'blueberry', 'ok google', 'jarvis', 'hey siri', 'bumblebee', 'alexa', 'hey barista', 'grasshopper', 'porcupine', 'americano', 'computer', 'terminator'}
->>> """
-
 
 @dataclasses.dataclass
 class Model:
@@ -30,9 +21,12 @@ class Model:
     keywords: list
     actions: list
 
-
 class WakeWord:
     def __init__(self, lang="en"):
+        arch = platform.machine()
+        system = platform.system()
+        model_dir = os.path.join(os.path.dirname(__file__), "wakeword_models")
+
         if lang == "en":
             keywords = ["bumblebee", "blueberry", "jarvis", "ok google", "hey siri", "alexa"]
             actions = [KeywordSpottingActions.HEY for _ in range(len(keywords))]
@@ -41,17 +35,27 @@ class WakeWord:
                 keywords=keywords,
             )
         elif lang == "ru":
-            actions = [KeywordSpottingActions.HEY, KeywordSpottingActions.STOP]
-            keywords = ["товарищ", "отмена"]
+            keywords = ["товарищ"]
+            actions = [KeywordSpottingActions.HEY]
+
+            if system == "Darwin":  # macOS
+                keyword_paths = [
+                    os.path.join(model_dir, "товарищ_ru_mac_v3_0_0.ppn"),
+                ]
+            elif arch in ["arm", "armv7l"]:
+                keywords.append("отмена")
+                actions.append(KeywordSpottingActions.STOP)
+                keyword_paths = [
+                    os.path.join(model_dir, "Товарищ_ru_arm.ppn"),
+                    os.path.join(model_dir, "отмена_ru_arm.ppn"),
+                ]
+            else:
+                raise Exception(f"Unsupported architecture: {arch}")
+
             recognizer = pvporcupine.create(
                 access_key=os.getenv("PVPORCUPINE_ACCESS_KEY"),
-                keyword_paths=[
-                    os.path.join(os.path.dirname(__file__), "Товарищ_ru_arm.ppn"),
-                    os.path.join(os.path.dirname(__file__), "отмена_ru_arm.ppn"),
-                ],
-                model_path=os.path.join(
-                    os.path.dirname(__file__), "porcupine_params_ru.pv"
-                ),
+                keyword_paths=keyword_paths,
+                model_path=os.path.join(model_dir, "porcupine_params_ru.pv"),
             )
         else:
             raise Exception("Not supported language")

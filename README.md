@@ -55,7 +55,20 @@ Qemu hardware emulation: https://www.qemu.org/docs/master/system/arm/orangepi.ht
 qemu-system-arm -M orangepi-pc -sd mycard.img -global allwinner-rtc.base-year=2000
 ```
 
+### MacOS develpoment
+```shell
+brew install -y portaudio
+pip install -r src/requirements.txt
+python3 src/main.py
+```
 
 ## Known-issues
 
 - [Skips a few first words. ALSA/DAC issue](https://forum.armbian.com/topic/33427-orangepipc-alsa-playvlc-skips-a-few-seconds-of-the-audio/)
+
+- https://snowboy.kitt.ai/
+
+
+## Ideas
+
+Port to android 4.1, use ReactNative + [picovoice](https://medium.com/picovoice/no-way-google-build-your-own-wake-word-service-on-android-339a0189ff4c)
