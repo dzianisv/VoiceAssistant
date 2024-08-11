@@ -3,7 +3,7 @@ import sys
 import logging
 import httpx
 
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferWindowMemory
 from langchain.chains import LLMChain
 from contextlib import contextmanager
@@ -48,15 +48,15 @@ class LLM(object):
         self.memory = ConversationBufferWindowMemory(
             k=memory_window, memory_key="chat_history", return_messages=True
         )
-
-        with proxy(os.environ.get("OPENAI_PROXY")):
-            self.llm = OpenAI(
-                openai_api_base=os.environ.get("OPENAI_API_BASE"), 
-                openai_api_key=os.environ.get("OPENAI_API_KEY"),
-                # for some reason openai_proxy didn't work for me, therefore I used http_client https://python.langchain.com/v0.2/docs/integrations/llms/openai/
-                http_client=httpx.Client(proxy=os.environ.get("OPENAI_PROXY")),
-                temperature=0.7, model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
-            )
+        
+        proxy_url = os.environ.get("OPENAI_PROXY")
+        self.llm = ChatOpenAI(
+            openai_api_base=os.environ.get("OPENAI_API_BASE"), 
+            openai_api_key=os.environ.get("OPENAI_API_KEY"),
+            openai_proxy=proxy_url,
+            temperature=0.7, 
+            model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+        )
 
         self.chain = self._init_chain()
         # self.chain = self._init_agent()
