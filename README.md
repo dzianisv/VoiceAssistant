@@ -66,6 +66,8 @@ python3 src/main.py
 
 - [Skips a few first words. ALSA/DAC issue](https://forum.armbian.com/topic/33427-orangepipc-alsa-playvlc-skips-a-few-seconds-of-the-audio/)
 
+- https://snowboy.kitt.ai/
+
 
 ## Ideas
 
