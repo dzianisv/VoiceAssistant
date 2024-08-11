@@ -18,7 +18,6 @@ arxiv
 # duckduckgo-search requires curl impersonate that is not available on armv7
 yt-dlp
 
-
 # required by pvporcupine
 pvporcupine
 pvrecorder
