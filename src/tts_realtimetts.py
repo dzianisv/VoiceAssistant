@@ -11,9 +11,6 @@ import hashlib
 import pygame
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
-
 
 def md5hash(data: str) -> str:
     return hashlib.md5(data.encode()).hexdigest()
@@ -56,5 +53,5 @@ class TTS:
             # https://platform.openai.com/docs/guides/text-to-speech/quickstart
             self.stream = TextToAudioStream(self.engine)
             self.stream.feed(text)
-            self.stream.play_async(output_wavfile=cache_file)
+            self.stream.play_async(language='ru', output_wavfile=cache_file)
             self.stream = None

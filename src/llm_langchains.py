@@ -15,15 +15,11 @@ from langchain.prompts import (
     SystemMessagePromptTemplate,
 )
 from langchain import hub
-
-from langchain_community.utilities.openweathermap import OpenWeatherMapAPIWrapper
 from langchain.agents import create_structured_chat_agent, AgentExecutor, load_tools
 from langchain_community.tools import YouTubeSearchTool
 from langchain import hub
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
 
 @contextmanager
 def proxy(proxy_url: str):

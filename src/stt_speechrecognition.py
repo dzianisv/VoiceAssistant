@@ -5,9 +5,6 @@ import sys
 import enum
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
-
 class Engine(enum.Enum):
     Google = "google"
     OpenAIWhisper = "openai-whisper"

@@ -11,8 +11,6 @@ class KeywordSpottingActions(enum.Enum):
 
 # Initialize logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
 
 import pvporcupine
 from pvrecorder import PvRecorder

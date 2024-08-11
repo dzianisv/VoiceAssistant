@@ -10,8 +10,6 @@ from dataclasses import dataclass
 from pydispatch import dispatcher
 
 logger = logging.getLogger("assistant")
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler(sys.stderr))
 
 import skills
 from hal import detect
@@ -148,5 +146,6 @@ class VoiceAssistant:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     assistant = VoiceAssistant()
     assistant.run()
