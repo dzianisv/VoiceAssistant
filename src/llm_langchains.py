@@ -70,8 +70,8 @@ class LLM(object):
             skils.append("arxiv")
         if check_package("duckduckgo-search"): # requires curl-impersonate that is not available for armv7
             skils.append("ddg-search")
-        if check_package("wikipedia"):
-            skils.append("wikipedia")
+        # if check_package("wikipedia"):
+        #     skils.append("wikipedia")
 
         tools = load_tools(skils)
         tools.append(YouTubeSearchTool())

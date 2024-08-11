@@ -7,6 +7,7 @@ import sys
 import threading
 from pydispatch import dispatcher
 import pygame
+import re
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -18,12 +19,6 @@ from gtts import gTTS
 logger.debug("loading pygame")
 pygame.mixer.init()
 logger.debug("all modules are loaded")
-
-def clean_filename(filename):
-    not_allowed_chars = set('<>:"/\\|?*') | set(chr(0))
-    cleaned_filename = ''.join('_' if c in not_allowed_chars else c for c in filename)
-    cleaned_filename = re.sub(r'\s+', '_', cleaned_filename.strip())
-    return cleaned_filename
 
 class TTS:
     def __init__(self):

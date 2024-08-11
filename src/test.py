@@ -13,7 +13,7 @@ class TestLLM(unittest.TestCase):
         assert("composer" in answer)
 
     def test_weather(self):
-        llm = LLM(o)
+        llm = LLM()
         answer = llm.ask("What is whether in Venice?")
         print("asnwer", answer)
 

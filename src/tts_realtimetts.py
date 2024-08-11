@@ -20,7 +20,7 @@ def md5hash(data: str) -> str:
 
 class TTS:
     def __init__(self):
-        self.workdir = os.path.join(os.getcwd(), 'gtts')
+        self.workdir = os.path.join(os.getcwd(), '.tts_cache')
         
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
@@ -43,11 +43,11 @@ class TTS:
     def stop(self):
         if self.stream:
              self.stream.stop()
+             self.stream = None
         else:
             pygame.mixer.music.stop()
 
-
-    def speak(self, text):
+    def speak(self, text, block: bool=True):
         cache_key = md5hash(text)
         cache_file = os.path.join(self.workdir, f"{cache_key}.wav")
         if os.path.exists(cache_file):
@@ -56,4 +56,5 @@ class TTS:
             # https://platform.openai.com/docs/guides/text-to-speech/quickstart
             self.stream = TextToAudioStream(self.engine)
             self.stream.feed(text)
-            self.stream.play_async(coutput_wavfile=cache_file)
+            self.stream.play_async(output_wavfile=cache_file)
+            self.stream = None

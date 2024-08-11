@@ -42,7 +42,7 @@ class VoiceAssistant:
         self.wakeword = WakeWord(lang=os.getenv("LANGUAGE", "ru"))
         logger.info("loading llm...")
         if llm_type == "google":
-            self.llm = LLM(api_key=os.getenv("GOOGLE_API_KEY"))
+            self.llm = LLM()
         elif llm_type == "openai":
             self.llm = LLM()
         else:
