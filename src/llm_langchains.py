@@ -58,8 +58,8 @@ class LLM(object):
             model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
         )
 
-        self.chain = self._init_chain()
-        # self.chain = self._init_agent()
+        # self.chain = self._init_chain()
+        self.chain = self._init_agent()
 
     def _init_agent(self):
         # https://python.langchain.com/docs/integrations/tools/openweathermap

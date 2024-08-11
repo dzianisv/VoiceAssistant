@@ -9,6 +9,7 @@ gtts
 langdetect
 pygame # to play gtts sounds
 portaudio # required by speech recognition library
+realtimetts[gtts,openai]
 
 pyowm
 wikipedia
