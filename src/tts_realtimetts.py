@@ -27,7 +27,9 @@ class TTS:
         dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
 
         with proxy(os.environ.get("OPENAI_PROXY")):
-            self.engine = OpenAIEngine(model='tts-1', voice='echo')
+            # voices https://github.com/KoljaB/RealtimeTTS/blob/master/RealtimeTTS/engines/openai_engine.py#L28
+            # voices demo https://platform.openai.com/docs/guides/text-to-speech
+            self.engine = OpenAIEngine(model='tts-1', voice='nova')
             self.stream = None
 
 
@@ -47,11 +49,11 @@ class TTS:
     def speak(self, text, block: bool=True):
         cache_key = md5hash(text)
         cache_file = os.path.join(self.workdir, f"{cache_key}.wav")
-        if os.path.exists(cache_file):
-            self.play(cache_file)
-        else:
-            # https://platform.openai.com/docs/guides/text-to-speech/quickstart
-            self.stream = TextToAudioStream(self.engine)
-            self.stream.feed(text)
-            self.stream.play_async(language='ru', output_wavfile=cache_file)
-            self.stream = None
+        # if os.path.exists(cache_file):
+        #     self.play(cache_file)
+        # else:
+        # https://platform.openai.com/docs/guides/text-to-speech/quickstart
+        self.stream = TextToAudioStream(self.engine)
+        self.stream.feed(text)
+        self.stream.play_async(language='ru', output_wavfile=cache_file)
+        self.stream = None
