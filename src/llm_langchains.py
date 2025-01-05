@@ -21,14 +21,6 @@ from langchain import hub
 
 logger = logging.getLogger(__name__)
 
-@contextmanager
-def proxy(proxy_url: str):
-    http_proxy, https_proxy = os.environ.get('HTTP_PROXY', ''), os.environ.get('HTTPS_PROXY', '')
-    os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = proxy_url, proxy_url
-    yield
-    os.environ['HTTP_PROXY'], os.environ['HTTPS_PROXY'] = http_proxy, https_proxy
-
-
 def check_package(package_name):
     try:
         __import__(package_name)
@@ -45,11 +37,10 @@ class LLM(object):
             k=memory_window, memory_key="chat_history", return_messages=True
         )
         
-        proxy_url = os.environ.get("OPENAI_PROXY")
         self.llm = ChatOpenAI(
             openai_api_base=os.environ.get("OPENAI_API_BASE"), 
             openai_api_key=os.environ.get("OPENAI_API_KEY"),
-            openai_proxy=proxy_url,
+            openai_proxy=os.environ.get("OPENAI_PROXY"),
             temperature=0.7, 
             model=os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
         )

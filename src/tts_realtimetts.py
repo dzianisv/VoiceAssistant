@@ -9,6 +9,7 @@ import httpx
 import os
 import hashlib
 import pygame
+import openai
 
 logger = logging.getLogger(__name__)
 
@@ -23,17 +24,14 @@ class TTS:
             os.makedirs(self.workdir)
             
         dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
-
-         # alloy, echo, fable, onyx, nova, and shimmer
-        proxy_url = os.environ.get("OPENAI_PROXY")
-        http_client=httpx.Client(proxy=proxy_url)
         self.engine = OpenAIEngine(model='tts-1', voice='echo')
-
         # self.voices = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
         # self.model = model
         # self.voice = voice
         # self.client = OpenAI()
-
+        proxy_url = os.environ.get("OPENAI_PROXY")
+        http_client=httpx.Client(proxy=proxy_url)
+        self.client = openai.OpenAI(http_client=http_client)
         self.stream = None
 
 
