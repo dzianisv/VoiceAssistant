@@ -12,7 +12,6 @@ pocketsphinx = "*"
 langchain-google-genai = "*"
 gtts = "*"
 pygame = "*"
-pyaudio = "*"
 langchain-openai = "*"
 pyowm = "*"
 wikipedia = "*"
@@ -27,6 +26,7 @@ audioplayer = "*"
 pydispatcher = "*"
 microwakeword = {ref = "main", git = "https://github.com/dzianisv/microWakeWord.git"}
 numpy = "*"
+pyaudio = "*"
 
 [dev-packages]
 pylint = "*"
