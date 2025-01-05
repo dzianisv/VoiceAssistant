@@ -10,6 +10,7 @@ import os
 import hashlib
 import pygame
 import openai
+from proxy import proxy
 
 logger = logging.getLogger(__name__)
 
@@ -22,17 +23,12 @@ class TTS:
         
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
-            
+    
         dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
-        self.engine = OpenAIEngine(model='tts-1', voice='echo')
-        # self.voices = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
-        # self.model = model
-        # self.voice = voice
-        # self.client = OpenAI()
-        proxy_url = os.environ.get("OPENAI_PROXY")
-        http_client=httpx.Client(proxy=proxy_url)
-        self.client = openai.OpenAI(http_client=http_client)
-        self.stream = None
+
+        with proxy(os.environ.get("OPENAI_PROXY")):
+            self.engine = OpenAIEngine(model='tts-1', voice='echo')
+            self.stream = None
 
 
     def play(self, filename: str):
