@@ -27,7 +27,13 @@ class TTS:
          # alloy, echo, fable, onyx, nova, and shimmer
         proxy_url = os.environ.get("OPENAI_PROXY")
         http_client=httpx.Client(proxy=proxy_url)
-        self.engine = OpenAIEngine(model='tts-1', voice='echo', openai_args={"http_client": http_client})
+        self.engine = OpenAIEngine(model='tts-1', voice='echo')
+
+        # self.voices = ["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
+        # self.model = model
+        # self.voice = voice
+        # self.client = OpenAI()
+
         self.stream = None
 
 

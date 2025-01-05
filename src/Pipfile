@@ -24,9 +24,10 @@ pvporcupine = "*"
 pvrecorder = "*"
 audioplayer = "*"
 pydispatcher = "*"
-microwakeword = {ref = "main", git = "https://github.com/dzianisv/microWakeWord.git"}
 numpy = "*"
 pyaudio = "*"
+microwakeword = {ref = "main", git = "https://github.com/dzianisv/microWakeWord.git"}
+realtimetts = "*"
 
 [dev-packages]
 pylint = "*"

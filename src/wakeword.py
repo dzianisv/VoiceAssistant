@@ -16,8 +16,6 @@ probability_cutoff = 0.5
 # Buffer to store the previous 3 samples of audio
 read_buffer_size = int(SAMPLE_RATE * 0.5)
 rolling_buffer_size = 3 * read_buffer_size
-rolling_buffer = np.zeros(rolling_buffer_size, dtype=np.int16)
-
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -40,6 +38,8 @@ class WakeWord:
                             rate=SAMPLE_RATE,
                             input=True,
                             frames_per_buffer=SAMPLE_RATE)
+
+        rolling_buffer = np.zeros(rolling_buffer_size, dtype=np.int16)
 
  
         try:
