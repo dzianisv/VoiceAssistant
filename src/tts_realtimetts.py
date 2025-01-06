@@ -9,6 +9,8 @@ import httpx
 import os
 import hashlib
 import pygame
+import openai
+from proxy import proxy
 
 logger = logging.getLogger(__name__)
 
@@ -21,14 +23,14 @@ class TTS:
         
         if not os.path.exists(self.workdir):
             os.makedirs(self.workdir)
-            
+    
         dispatcher.connect(self.stop, signal='stop', sender=dispatcher.Any)
 
-         # alloy, echo, fable, onyx, nova, and shimmer
-        proxy_url = os.environ.get("OPENAI_PROXY")
-        http_client=httpx.Client(proxy=proxy_url)
-        self.engine = OpenAIEngine(model='tts-1', voice='echo', openai_args={"http_client": http_client})
-        self.stream = None
+        with proxy(os.environ.get("OPENAI_PROXY")):
+            # voices https://github.com/KoljaB/RealtimeTTS/blob/master/RealtimeTTS/engines/openai_engine.py#L28
+            # voices demo https://platform.openai.com/docs/guides/text-to-speech
+            self.engine = OpenAIEngine(model='tts-1', voice='nova')
+            self.stream = None
 
 
     def play(self, filename: str):
@@ -47,11 +49,11 @@ class TTS:
     def speak(self, text, block: bool=True):
         cache_key = md5hash(text)
         cache_file = os.path.join(self.workdir, f"{cache_key}.wav")
-        if os.path.exists(cache_file):
-            self.play(cache_file)
-        else:
-            # https://platform.openai.com/docs/guides/text-to-speech/quickstart
-            self.stream = TextToAudioStream(self.engine)
-            self.stream.feed(text)
-            self.stream.play_async(language='ru', output_wavfile=cache_file)
-            self.stream = None
+        # if os.path.exists(cache_file):
+        #     self.play(cache_file)
+        # else:
+        # https://platform.openai.com/docs/guides/text-to-speech/quickstart
+        self.stream = TextToAudioStream(self.engine)
+        self.stream.feed(text)
+        self.stream.play_async(language='ru', output_wavfile=cache_file)
+        self.stream = None

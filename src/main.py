@@ -15,10 +15,9 @@ import skills
 from hal import detect
 import languages
 from llm_langchains import LLM
-from wakeword_pvporcupine import WakeWord, KeywordSpottingActions
+from wakeword import WakeWord
 from stt_speechrecognition import STT
 import tts
-from enum import Enum
 import dataclasses
 
 @dataclasses.dataclass
